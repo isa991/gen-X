@@ -2,6 +2,7 @@
 
 ## Pro servidor funcionar
 
+- [ ] Implementar Score dos sintomas no histórico de consulta.
 - [ ] Implementar views para as diferentes coisas que o projeto pode fazer com os dados do DB
 - [ ] Implementar login de usuários e acessos ao DB
 

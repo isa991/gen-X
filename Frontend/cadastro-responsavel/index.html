@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Paciente</title>
+    <title>Cadastro de Responsável</title>
 </head>
 <body>
-    <form action="http://localhost:8000/api/cadastro-paciente/" method="post">
+    <form action="http://localhost:8000/api/cadastro-responsavel/" method="post">
         <label for="nome">Nome:</label>
         <input type="text" id="nome" name="nome" required>
         <br>
-        <label for="CPF_Paciente">CPF:</label>
-        <input type="text" id="CPF_Paciente" name="CPF_Paciente" required>
+        <label for="CPF_Responsavel">CPF:</label>
+        <input type="text" id="CPF_Responsavel" name="CPF_Responsavel" required>
         <br>
         <label for="data_de_nascimento">Data de Nascimento:</label>
         <input type="date" id="data_de_nascimento" name="data_de_nascimento" required>
@@ -23,12 +23,15 @@
             <option value="Feminino">Feminino</option>
         </select>
         <br>
+        <label for="telefone">Telefone:</label>
+        <input type="text" id="telefone" name="telefone" required>
+        <br>
         <button type="submit">Cadastrar</button>
     </form>
 
     <script>
         document.querySelector('button[type="submit"]').addEventListener('click', () => {
-            alert('Paciente cadastrado com sucesso!')
+            alert('Responsável cadastrado com sucesso!')
         })
     </script>
 </body>
