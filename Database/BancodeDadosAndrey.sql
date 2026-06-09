@@ -3,6 +3,7 @@ use Hospital;
 
 create table Medico(
   id_medico int primary key AUTO_INCREMENT,
+  email_medico varchar(30),
   senha varchar(50)
 );
 
