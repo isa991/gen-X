@@ -3,6 +3,7 @@ use Hospital;
 
 create table Medico(
   id_medico int primary key AUTO_INCREMENT,
+  email_medico varchar(30),
   senha varchar(50)
 );
 
@@ -21,12 +22,9 @@ create table Responsavel(
   telefone varchar(20)
 );
 
-create table Sintomas_do_paciente(
-	id_sintomas int primary key AUTO_INCREMENT,
-  sintomas varchar(256)
-);
 
-create table Sintomas(
+
+create table ListadeSintomas(
   id_sintoma int primary key AUTO_INCREMENT,
   sintoma varchar(50),
   peso_masc int,
@@ -39,14 +37,14 @@ create table historico_de_consulta (
   CPF_Paciente varchar(11),
   CPF_Responsavel varchar(11),
   id_medico int,
-  id_sintomas int,
+  sintomas varchar(250),
   FOREIGN KEY (CPF_Paciente) REFERENCES Paciente(CPF_Paciente),
   FOREIGN KEY (CPF_Responsavel) REFERENCES Responsavel(CPF_Responsavel),
   FOREIGN KEY (id_medico) REFERENCES Medico(id_medico),
-	FOREIGN KEY (id_sintomas) REFERENCES Sintomas_do_paciente(id_sintomas)
+	
 );
 
-INSERT INTO Sintomas (sintoma, peso_masc, peso_fem) VALUES
+INSERT INTO ListadeSintomas (sintoma, peso_masc, peso_fem) VALUES
 ("Deficiência intelectual", 32, 20),
 ("Face alongada/orelhas", 29, 9),
 ("Macroorquidismo", 26, 0),
