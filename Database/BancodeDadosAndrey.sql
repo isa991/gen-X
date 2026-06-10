@@ -22,8 +22,6 @@ create table Responsavel(
   telefone varchar(20)
 );
 
-
-
 create table ListadeSintomas(
   id_sintoma int primary key AUTO_INCREMENT,
   sintoma varchar(50),
@@ -38,10 +36,10 @@ create table historico_de_consulta (
   CPF_Responsavel varchar(11),
   id_medico int,
   sintomas varchar(250),
+  score_risco int,
   FOREIGN KEY (CPF_Paciente) REFERENCES Paciente(CPF_Paciente),
   FOREIGN KEY (CPF_Responsavel) REFERENCES Responsavel(CPF_Responsavel),
-  FOREIGN KEY (id_medico) REFERENCES Medico(id_medico),
-	
+  FOREIGN KEY (id_medico) REFERENCES Medico(id_medico)
 );
 
 INSERT INTO ListadeSintomas (sintoma, peso_masc, peso_fem) VALUES
