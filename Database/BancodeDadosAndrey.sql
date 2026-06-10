@@ -37,10 +37,11 @@ create table historico_de_consulta (
   CPF_Paciente varchar(11),
   CPF_Responsavel varchar(11),
   id_medico int,
+  score_do_paciente float,
   sintomas varchar(250),
   FOREIGN KEY (CPF_Paciente) REFERENCES Paciente(CPF_Paciente),
   FOREIGN KEY (CPF_Responsavel) REFERENCES Responsavel(CPF_Responsavel),
-  FOREIGN KEY (id_medico) REFERENCES Medico(id_medico),
+  FOREIGN KEY (id_medico) REFERENCES Medico(id_medico)
 	
 );
 
