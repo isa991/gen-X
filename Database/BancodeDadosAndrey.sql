@@ -12,7 +12,7 @@ create table Paciente(
   nome varchar(50),
   data_de_nascimento date,
   sexo Varchar(15),
-  foto_do_paciente Blob
+  foto_do_paciente MEDIUMBLOB
 );
 
 create table Responsavel(
