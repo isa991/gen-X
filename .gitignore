@@ -8,3 +8,8 @@ wheels/
 
 # Virtual environments
 .venv
+
+# npm stuff
+Frontend/.next
+Frontend/node_modules
+Frontend/dist
