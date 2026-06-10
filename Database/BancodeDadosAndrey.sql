@@ -11,7 +11,8 @@ create table Paciente(
 	CPF_Paciente varchar(11) primary key not null,
   nome varchar(50),
   data_de_nascimento date,
-  sexo Varchar(15)
+  sexo Varchar(15),
+  foto_do_paciente Blob
 );
 
 create table Responsavel(
