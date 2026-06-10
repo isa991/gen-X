@@ -8,7 +8,7 @@
 
 ## Cleanup
 
-- [ ] Mudar o jeito que o servidor se conecta ao DB (para facil implementação no hospital mesmo)
+- [x] Mudar o jeito que o servidor se conecta ao DB (para facil implementação no hospital mesmo)
 - [ ] Remover o compose.yaml
 - [ ] Pegar as dependencias e fazer um requirements.txt
 - [ ] Remover as coisas do UV

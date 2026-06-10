@@ -10,7 +10,7 @@ from .serializer import *
 
 @api_view(['GET'])
 def get_sintomas(request):
-    items = Sintomas.objects.all()
+    items = ListadeSintomas.objects.all()
     return Response(SintomaSerializer(items, many=True).data)
 
 @api_view(['GET'])
