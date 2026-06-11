@@ -6,7 +6,7 @@ export default function CPFInput({
   placeholder = "000.000.000-00",
   className = "",
 }) {
-  const formatCPF = (value) => {
+  const formatCPF = (value = "") => {
     const numbers = value.replace(/\D/g, "");
 
     return numbers
@@ -17,15 +17,14 @@ export default function CPFInput({
   };
 
   const handleChange = (event) => {
-    const formattedValue = formatCPF(event.target.value);
-
-    onChange(formattedValue);
+    const rawValue = event.target.value.replace(/\D/g, "").slice(0, 11);
+    onChange(rawValue);
   };
 
   return (
     <input
       type="text"
-      value={value}
+      value={formatCPF(value)}
       onChange={handleChange}
       placeholder={placeholder}
       maxLength={14}

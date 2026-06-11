@@ -19,9 +19,11 @@ import {
 import Header from "@/components/Header";
 
 import PatientService from "@/services/PatientService";
+import AttendanceService from "@/services/AttendanceService";
 
 export default function Dashboard() {
   const [patients, setPatients] = useState([]);
+  const [attendances, setAttendances] = useState([]);
   const [stats, setStats] = useState({
     totalPatients: 0,
     calculatedScores: 0,
@@ -32,32 +34,31 @@ export default function Dashboard() {
   useEffect(() => { 
     async function loadPatients() {
       const allPatients = await PatientService.getAll();
+      const allAttendances = await AttendanceService.getAll();
 
       setPatients(allPatients);
+      setAttendances(allAttendances);
 
-      /*
-      const calculatedScores = allPatients.filter(
-        (patient) => patient.riskScore !== undefined,
+      const calculatedScores = allAttendances.filter(
+        (attendance) => attendance.score_risco !== undefined,
       ).length;
 
-      const highRiskPatients = allPatients.filter(
-        (patient) => patient.status === "Alto Risco",
+      const highRiskPatients = allAttendances.filter(
+        (attendance) => attendance.score_risco >= 77,
       ).length;
 
-      const totalScore = allPatients.reduce(
-        (sum, patient) => sum + (patient.riskScore || 0),
+      const totalScore = allAttendances.reduce(
+        (sum, attendance) => sum + (attendance.score_risco || 0),
         0,
       );
 
-      const averageScore =
-        totalPatients > 0 ? Math.round(totalScore / totalPatients) : 0;
-      */
+      const averageScore = allPatients.length > 0 ? Math.round(totalScore / allPatients.length) : 0;
 
       setStats({
         totalPatients: allPatients.length,
-        calculatedScores: 0,
-        highRiskPatients: 0,
-        averageScore: 0,
+        calculatedScores,
+        highRiskPatients,
+        averageScore,
       })
     }
 
@@ -67,15 +68,15 @@ export default function Dashboard() {
   const pieData = [
     {
       name: "Alto Risco",
-      value: 1// patients.filter((p) => p.status === "Alto Risco").length,
+      value: attendances.filter((a) => a.score_risco >= 77).length,
     },
     {
       name: "Risco Moderado",
-      value: 1//patients.filter((p) => p.status === "Risco Moderado").length,
+      value: attendances.filter((a) => a.score_risco >= 45 && a.score_risco <= 76).length,
     },
     {
       name: "Baixo Risco",
-      value: 1//patients.filter((p) => p.status === "Baixo Risco").length,
+      value: attendances.filter((a) => a.score_risco >= 0 && a.score_risco <= 44).length,
     },
   ];
 
@@ -94,11 +95,25 @@ export default function Dashboard() {
     }
   };
 
-  const scoreData = patients.slice(0, 8).map((patient) => ({
-    nome: patient.nome?.split(" ")[0] || "Paciente",
-    score: patient.riskScore || 0,
-    status: patient.status || "Não definido",
-  }));
+  const scoreData = patients.slice(0, 8).map((patient, index) => {
+    const latest = attendances
+      .filter((a) => a.paciente === patient.CPF_Paciente)
+      .sort((a, b) => new Date(b.data_de_consulta) - new Date(a.data_de_consulta))[0];
+
+    const attendance = latest;
+
+    console.log(JSON.stringify(latest));
+
+    const score = attendance?.score_risco ?? 0;
+    const status =
+      score <= 40 ? "Baixo Risco" : score <= 70 ? "Risco Moderado" : "Alto Risco";
+
+    return {
+      nome: patient.nome?.split(" ")[0] || "Paciente",
+      score,
+      status,
+    };
+  });
 
   return (
     <main className="flex min-h-screen bg-slate-100">

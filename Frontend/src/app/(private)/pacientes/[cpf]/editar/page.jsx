@@ -22,9 +22,7 @@ export default function EditPatient() {
 
   const [name, setName] = useState("");
   const [cpf, setCpf] = useState("");
-  const [guardian, setGuardian] = useState("");
   const [sex, setSex] = useState("");
-  const [description, setDescription] = useState("");
 
   const [selectedSymptoms, setSelectedSymptoms] = useState([]);
 
@@ -37,9 +35,7 @@ export default function EditPatient() {
 
         setName(patient.nome || "");
         setCpf(patient.CPF_Paciente || "");
-        setGuardian(patient.guardian || "");
         setSex(patient.sexo || "");
-        setDescription(patient.description || "");
 
         setSelectedSymptoms(patient.symptoms || []);
       }
@@ -72,9 +68,6 @@ export default function EditPatient() {
       nome: name,
       CPF_Paciente: cpf,
       sexo: sex,
-      descricao: description,
-      sintomas: selectedSymptoms,
-      score_risco: score,
     };
 
     PatientService.update(originalCpf, updatedPatient);
@@ -101,7 +94,7 @@ export default function EditPatient() {
         <div className="p-8">
           <div className="bg-white rounded-3xl shadow-sm p-8">
             <form onSubmit={handleSubmit} className="space-y-8">
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid md:grid-cols-1 gap-6">
                 <input
                   type="text"
                   value={name}
@@ -117,14 +110,6 @@ export default function EditPatient() {
                   className="border border-slate-300 rounded-xl p-3"
                 />
 
-                <input
-                  type="text"
-                  value={guardian}
-                  onChange={(e) => setGuardian(e.target.value)}
-                  placeholder="Responsável"
-                  className="border border-slate-300 rounded-xl p-3 text-slate-800"
-                />
-
                 <select
                   value={sex}
                   onChange={(e) => setSex(e.target.value)}
@@ -134,31 +119,6 @@ export default function EditPatient() {
                   <option value="Masculino">Masculino</option>
                   <option value="Feminino">Feminino</option>
                 </select>
-              </div>
-
-              <div>
-                <h2 className="text-xl font-semibold text-slate-800 mb-4">
-                  Sintomas Observados
-                </h2>
-
-                <SymptomChecklist
-                  symptoms={symptoms}
-                  selectedSymptoms={selectedSymptoms}
-                  setSelectedSymptoms={setSelectedSymptoms}
-                />
-              </div>
-
-              <div>
-                <h2 className="text-xl font-semibold text-slate-800 mb-4">
-                  Observações Clínicas
-                </h2>
-
-                <textarea
-                  rows="8"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  className="w-full border border-slate-300 rounded-xl p-4 text-slate-800"
-                />
               </div>
 
               <div className="flex justify-end gap-4">

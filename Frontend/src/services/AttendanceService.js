@@ -20,10 +20,27 @@ async function getAll() {
   }
 }
 
-async function getByCpf(cpf) {
+async function getAllByCpf(cpf) {
   const attendances = await getAll();
 
-  return attendances.find((p) => p.CPF_Paciente === cpf);
+  return attendances.filter((a) => a.paciente === cpf);
+}
+
+async function getByCpf(cpf) {
+  const attendances = await getAllByCpf(cpf);
+
+  const sortedAttendances = attendances.sort(
+    (a, b) =>
+      new Date(b.data_de_consulta) - new Date(a.data_de_consulta)
+  );
+
+  return sortedAttendances[0];
+}
+
+async function getById(id) {
+  const attendances = await getAll();
+
+  return attendances.find((a) => a.id_consulta === parseInt(id));
 }
 
 async function postJson(url, payload, errorLabel) {
@@ -114,6 +131,8 @@ async function registerAttendance(data) {
 
 export default {
   getAll,
+  getAllByCpf,
   getByCpf,
+  getById,
   registerAttendance,
 };

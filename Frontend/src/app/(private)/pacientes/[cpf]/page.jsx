@@ -7,20 +7,45 @@ import Header from "@/components/Header";
 import RiskBadge from "@/components/RiskBadge";
 
 import PatientService from "@/services/PatientService";
+import AttendanceService from "@/services/AttendanceService";
+import GuardianService from "@/services/GuardianService";
 
 export default function PatientDetails() {
   const params = useParams();
   const router = useRouter();
 
   const [patient, setPatient] = useState(null);
+  const [attendances, setAttendances] = useState([]);
+  const [recentAttendance, setAttendance] = useState(null);
+  const [responsavel, setResponsavel] = useState(null);
+  
 
   useEffect(() => {
-    async function findPatient() {
-      const found = await PatientService.getByCpf(params.cpf);
-      setPatient(found || null);
-    }
-    findPatient();
-  }, [params.cpf]);
+  async function findPatient() {
+    const found = await PatientService.getByCpf(params.cpf);
+    setPatient(found || null);
+
+    const allAttendances = await AttendanceService.getAllByCpf(params.cpf);
+
+    const sortedAttendances = allAttendances.sort(
+      (a, b) =>
+        new Date(b.data_de_consulta) - new Date(a.data_de_consulta)
+    );
+
+    setAttendances(sortedAttendances);
+    setAttendance(sortedAttendances[0] || null);
+  }
+
+  findPatient();
+}, [params.cpf]);
+
+  useEffect(() => {
+    if (!recentAttendance?.responsavel) return;
+
+    GuardianService.getByCpf(recentAttendance?.responsavel)
+      .then((guardian) => setResponsavel(guardian || null))
+      .catch(console.error);
+  }, [recentAttendance?.responsavel]);
 
   if (!patient) {
     return (
@@ -42,23 +67,28 @@ export default function PatientDetails() {
     return "text-green-600";
   };
 
-  const history = [
-    ...(patient.evaluations || []),
-    ...(patient.attendances || []),
-  ].sort((a, b) => new Date(a.date || 0) - new Date(b.date || 0));
+  const formatCPF = (value = "") => {
+    const numbers = value.replace(/\D/g, "");
 
-  const scoreHistory = history
-    .filter((item) => item.riskScore !== undefined && item.date)
+    return numbers
+      .replace(/^(\d{3})(\d)/, "$1.$2")
+      .replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3")
+      .replace(/\.(\d{3})(\d)/, ".$1-$2")
+      .slice(0, 14);
+  };
+
+  const scoreHistory = attendances
+    .filter((item) => item.score_risco !== undefined && item.data_de_consulta)
     .map((item, index) => ({
       index,
-      date: new Date(item.date).toLocaleDateString("pt-BR"),
-      score: Number(item.riskScore),
+      date: new Date(item.data_de_consulta).toLocaleDateString("pt-BR"),
+      score: Number(item.score_risco),
     }));
 
   return (
     <main className="flex min-h-screen bg-slate-100">
       <section className="flex-1">
-        <Header title={patient.nome} subtitle={`CPF: ${patient.cpf}`} />
+        <Header title={patient.nome} subtitle={`CPF: ${patient.CPF_Paciente}`} />
 
         <div className="p-8 space-y-8">
           <div className="bg-white rounded-3xl shadow-sm p-8">
@@ -81,13 +111,6 @@ export default function PatientDetails() {
                 >
                   Editar
                 </button>
-
-                <button
-                  onClick={() => router.push(`/pacientes/${patient.cpf}/score`)}
-                  className="px-5 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition"
-                >
-                  Calcular Score
-                </button>
               </div>
             </div>
 
@@ -99,7 +122,7 @@ export default function PatientDetails() {
 
               <div className="bg-slate-50 rounded-2xl p-5">
                 <p className="text-sm text-slate-500">CPF</p>
-                <p className="text-lg font-semibold">{patient.CPF_Paciente}</p>
+                <p className="text-lg font-semibold">{formatCPF(patient.CPF_Paciente)}</p>
               </div>
 
               <div className="bg-slate-50 rounded-2xl p-5">
@@ -110,7 +133,7 @@ export default function PatientDetails() {
               <div className="bg-slate-50 rounded-2xl p-5">
                 <p className="text-sm text-slate-500">Responsável atual</p>
                 <p className="text-lg font-semibold">
-                  {patient.guardian || "-"}
+                  {responsavel?.nome || "-"}
                 </p>
               </div>
             </div>
@@ -167,21 +190,21 @@ export default function PatientDetails() {
                 <p className="text-sm text-slate-500">Score de risco</p>
                 <p
                   className={`text-5xl font-bold ${getRiskColor(
-                    patient.riskScore,
+                    recentAttendance?.score_risco,
                   )}`}
                 >
-                  {patient.riskScore || 0}%
+                  {recentAttendance?.score_risco || 0}%
                 </p>
               </div>
 
               <div>
                 <p className="text-sm text-slate-500 mb-2">Classificação</p>
-                <RiskBadge status={patient.status} />
+                <RiskBadge status={recentAttendance?.score_risco <= 40 ? "Baixo Risco" : recentAttendance?.score_risco <= 70 ? "Risco Moderado" : "Alto Risco"} />
               </div>
 
               <button
                 onClick={() =>
-                  router.push(`/pacientes/${patient.cpf}/resultado`)
+                  router.push(`/pacientes/${patient.CPF_Paciente}/resultado/${recentAttendance?.id_consulta}`)
                 }
                 className="px-6 py-3 bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition"
               >
@@ -195,9 +218,9 @@ export default function PatientDetails() {
               Histórico de Atendimentos
             </h2>
 
-            {history.length > 0 ? (
+            {attendances.length > 0 ? (
               <div className="space-y-6">
-                {history.map((item, index) => (
+                {attendances.map((item, index) => (
                   <div
                     key={index}
                     className="bg-slate-50 border border-slate-100 rounded-2xl p-5"
@@ -205,15 +228,15 @@ export default function PatientDetails() {
                     <div className="flex flex-col md:flex-row md:justify-between gap-2">
                       <p className="text-sm text-slate-500">
                         {" "}
-                        {item.date
-                          ? new Date(item.date).toLocaleString("pt-BR")
+                        {item.data_de_consulta
+                          ? new Date(item.data_de_consulta).toLocaleString("pt-BR")
                           : "Data não informada"}
                       </p>
 
                       <p className="text-sm text-slate-500">
                         CRM:{" "}
                         <span className="text-slate-700 font-medium">
-                          {item.crm || "-"}
+                          {item.id_medico || "-"}
                         </span>
                       </p>
                     </div>
@@ -221,23 +244,20 @@ export default function PatientDetails() {
                     <div className="mt-3 text-sm text-slate-600">
                       Responsável:{" "}
                       <strong className="text-slate-800">
-                        {item.guardian || "-"}
-                      </strong>{" "}
-                      <span className="text-slate-500">
-                        — {item.relationship || "sem parentesco informado"}
-                      </span>
+                        {responsavel?.nome || "-"}
+                      </strong>
                     </div>
 
-                    {item.symptoms?.length > 0 && (
+                    {item.sintomas?.length > 0 && (
                       <div className="mt-4">
                         <p className="text-sm font-semibold text-slate-700 mb-2">
                           Sintomas
                         </p>
 
                         <div className="flex flex-wrap gap-2">
-                          {item.symptoms.map((s, i) => (
+                          {item.sintomas.split(', ').map((s) => (
                             <span
-                              key={i}
+                              key={s}
                               className="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-700"
                             >
                               {s}
@@ -247,21 +267,9 @@ export default function PatientDetails() {
                       </div>
                     )}
 
-                    {item.description && (
-                      <div className="mt-4">
-                        <p className="text-sm font-semibold text-slate-700 mb-1">
-                          Descrição
-                        </p>
-
-                        <p className="text-slate-700 text-sm whitespace-pre-line">
-                          {item.description}
-                        </p>
-                      </div>
-                    )}
-
-                    {item.riskScore !== undefined && (
+                    {item.score_risco !== undefined && (
                       <p className="mt-4 font-bold text-slate-800">
-                        Score: {item.riskScore}%
+                        Score: {item.score_risco}%
                       </p>
                     )}
                   </div>

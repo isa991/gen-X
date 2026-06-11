@@ -6,19 +6,29 @@ import { useParams } from "next/navigation";
 import Header from "@/components/Header";
 
 import PatientService from "@/services/PatientService";
+import AttendanceService from "@/services/AttendanceService";
 
 export default function Resultado() {
   const params = useParams();
 
   const [patient, setPatient] = useState(null);
+  const [attendance, setAttendance] = useState(null);
 
   useEffect(() => {
-    const p = PatientService.getByCpf(params.cpf);
+    async function getInfo() {
+      const p = await PatientService.getByCpf(params.cpf);
 
-    if (!p) return;
+      if (!p) return;
 
-    setPatient(p);
-  }, [params.cpf]);
+      const a = await AttendanceService.getById(params.id);
+
+      if (!a) return;
+
+      setPatient(p);
+      setAttendance(a);
+    }
+    getInfo();
+  }, [params.cpf, params.id]);
 
   if (!patient) {
     return (
@@ -38,7 +48,7 @@ export default function Resultado() {
     return "Baixo Risco";
   };
 
-  const status = getRiskStatus(patient.riskScore || 0);
+  const status = getRiskStatus(attendance.score_risco || 0);
 
   return (
     <main className="flex min-h-screen bg-slate-100">
@@ -58,7 +68,7 @@ export default function Resultado() {
                     : "text-green-600"
               }`}
             >
-              {patient.riskScore}%
+              {attendance.score_risco}%
             </div>
 
             <span

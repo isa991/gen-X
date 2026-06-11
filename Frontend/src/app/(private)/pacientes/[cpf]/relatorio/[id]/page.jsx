@@ -7,20 +7,38 @@ import Header from "@/components/Header";
 import RiskBadge from "@/components/RiskBadge";
 
 import PatientService from "@/services/PatientService";
+import AttendanceService from "@/services/AttendanceService";
+import GuardianService from "@/services/GuardianService";
 
 export default function RelatorioPaciente() {
   const params = useParams();
   const router = useRouter();
 
   const [patient, setPatient] = useState(null);
+  const [attendance, setAttendance] = useState(null);
+  const [guardian, setGuardian] = useState(null);
 
   useEffect(() => {
     async function findPatient() {
       const found = await PatientService.getByCpf(params.cpf);
       setPatient(found || null);
+
+      const foundAtt = await AttendanceService.getById(params.id);
+      setAttendance(foundAtt || null);
     }
     findPatient();
   }, [params.cpf]);
+
+
+  useEffect(() => {
+    async function findGuardian() {
+      if (!attendance?.responsavel) return ;
+
+      const foundGuardian = await GuardianService.getByCpf(attendance?.responsavel);
+      setGuardian(foundGuardian || null);
+    }
+    findGuardian();
+  }, [attendance?.responsavel])
 
   if (!patient) {
     return (
@@ -58,12 +76,12 @@ export default function RelatorioPaciente() {
 
                 <div>
                   <p>Sexo</p>
-                  <p>{patient.sex || "-"}</p>
+                  <p>{patient.sexo || "-"}</p>
                 </div>
 
                 <div>
                   <p>Responsável</p>
-                  <p>{patient.guardian || "-"}</p>
+                  <p>{guardian?.nome || "-"}</p>
                 </div>
               </div>
             </section>
@@ -72,8 +90,8 @@ export default function RelatorioPaciente() {
               <h2 className="text-xl font-semibold mb-6">Sintomas</h2>
 
               <div className="flex flex-wrap gap-3">
-                {patient.symptoms?.length ? (
-                  patient.symptoms.map((s) => (
+                {attendance?.sintomas ? (
+                  attendance?.sintomas.split(", ").map((s) => (
                     <span key={s} className="px-3 py-1 bg-blue-50 rounded-full">
                       {s}
                     </span>
@@ -91,12 +109,12 @@ export default function RelatorioPaciente() {
                 <div className="bg-blue-50 p-6 rounded-2xl">
                   <p>Score</p>
                   <h3 className="text-5xl text-blue-600 font-bold">
-                    {patient.riskScore || 0}%
+                    {attendance?.score_risco || 0}%
                   </h3>
                 </div>
 
                 <div className="bg-slate-50 p-6 rounded-2xl">
-                  <RiskBadge status={patient.status} />
+                  <RiskBadge status={attendance?.score_risco <= 40 ? "Baixo Risco" : attendance?.score_risco <= 70 ? "Risco Moderado" : "Alto Risco"} />
                 </div>
               </div>
             </section>

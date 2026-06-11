@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 
 import Header from "@/components/Header";
@@ -8,11 +8,13 @@ import RiskBadge from "@/components/RiskBadge";
 import StatisticsCard from "@/components/StatisticsCard";
 
 import PatientService from "@/services/PatientService";
+import AttendanceService from "@/services/AttendanceService";
 
 export default function Relatorios() {
   const router = useRouter();
 
   const [patients, setPatients] = useState([]);
+  const [attendances, setAttendances] = useState([]);
   const [statistics, setStatistics] = useState({
     total: 0,
     highRisk: 0,
@@ -23,22 +25,22 @@ export default function Relatorios() {
 
   useEffect(() => {
     async function loadPatient() {
-      const all = await PatientService.getAll();
-      setPatients(all);
+      const allPatients = await PatientService.getAll();
+      setPatients(allPatients);
 
-      const highRisk = all.filter((p) => p.status === "Alto Risco").length;
-      const moderateRisk = all.filter(
-        (p) => p.status === "Risco Moderado",
-      ).length;
-      const lowRisk = all.filter((p) => p.status === "Baixo Risco").length;
+      const allAttendances = await AttendanceService.getAll();
+      setAttendances(allAttendances);
 
-      const totalScore = all.reduce((sum, p) => sum + (p.riskScore || 0), 0);
+      const highRisk = allAttendances.filter((a) => a.score_risco >= 77 ? "Alto Risco" : "").length;
+      const moderateRisk = allAttendances.filter((a) => a.score_risco >= 45 && a.score_risco <= 76 ? "Risco Moderado" : "").length;
+      const lowRisk = allAttendances.filter((a) => a.score_risco >= 0 && a.score_risco <= 44 ? "Baixo Risco" : "").length;
 
-      const averageScore =
-        all.length > 0 ? Math.round(totalScore / all.length) : 0;
+      const totalScore = allAttendances.reduce((sum, a) => sum + (a.score_risco || 0), 0);
+
+      const averageScore = allAttendances.length > 0 ? Math.round(totalScore / allAttendances.length) : 0;
 
       setStatistics({
-        total: all.length,
+        total: allAttendances.length,
         highRisk,
         moderateRisk,
         lowRisk,
@@ -47,6 +49,23 @@ export default function Relatorios() {
     }
     loadPatient();
   }, []);
+
+    const patientMap = useMemo(() => {
+      return patients.reduce((acc, patient) => {
+        acc[patient.CPF_Paciente] = patient;
+        return acc;
+      }, {});
+    }, [patients]);
+
+    const formatCPF = (value = "") => {
+      const numbers = value.replace(/\D/g, "");
+
+      return numbers
+        .replace(/^(\d{3})(\d)/, "$1.$2")
+        .replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3")
+        .replace(/\.(\d{3})(\d)/, ".$1-$2")
+        .slice(0, 14);
+    };
 
   return (
     <main className="flex min-h-screen bg-slate-100">
@@ -76,6 +95,9 @@ export default function Relatorios() {
                     CPF
                   </th>
                   <th className="p-3 text-left text-slate-600 font-medium">
+                    Data da consulta
+                  </th>
+                  <th className="p-3 text-left text-slate-600 font-medium">
                     Score
                   </th>
                   <th className="p-3 text-left text-slate-600 font-medium">
@@ -88,35 +110,46 @@ export default function Relatorios() {
               </thead>
 
               <tbody>
-                {patients.map((patient) => (
-                  <tr
-                    key={patient.CPF_Paciente}
-                    className="border-b hover:bg-slate-50 transition"
-                  >
-                    <td className="p-3 text-slate-800">{patient.nome}</td>
+                {attendances.map((attendance) => {
+                  const patient = patientMap[attendance.paciente];
 
-                    <td className="p-3 text-slate-700">{patient.CPF_Paciente}</td>
+                  const score = attendance.score_risco || 0;
 
-                    <td className="p-3 text-slate-700">
-                      {patient.riskScore || 0}%
-                    </td>
+                  return (
+                    <tr
+                      key={attendance.id_consulta}
+                      className="border-b hover:bg-slate-50 transition"
+                    >
+                      <td className="p-3 text-slate-800">{patient?.nome}</td>
 
-                    <td className="p-3">
-                      <RiskBadge status={patient.status} />
-                    </td>
+                      <td className="p-3 text-slate-700">{formatCPF(attendance.paciente)}</td>
 
-                    <td className="p-3">
-                      <button
-                        onClick={() =>
-                          router.push(`/pacientes/${patient.CPF_Paciente}/relatorio`)
-                        }
-                        className="px-3 py-1 bg-green-600 text-white rounded-lg"
-                      >
-                        Ver relatório
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                      <td className="p-3 text-slate-700">
+                        {attendance.data_de_consulta
+                          ? new Date(attendance.data_de_consulta).toLocaleDateString("pt-BR")
+                          : "-"}
+                      </td>
+
+                      <td className="p-3 text-slate-700">
+                        {score}%
+                      </td>
+
+                      <td className="p-3">
+                        <RiskBadge status={score <= 40 ? "Baixo Risco" : score <= 70 ? "Risco Moderado" : "Alto Risco"} />
+                      </td>
+
+                      <td className="p-3">
+                        <button
+                          onClick={() =>
+                            router.push(`/pacientes/${attendance.paciente}/relatorio/${attendance.id_consulta}`)
+                          }
+                          className="px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+                        >
+                          Ver relatório
+                        </button>
+                      </td>
+                    </tr>
+                  );})}
               </tbody>
             </table>
           </div>

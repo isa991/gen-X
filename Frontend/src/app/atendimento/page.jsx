@@ -161,13 +161,19 @@ export default function Atendimento() {
               </div>
             )}
 
-            {existingGuardian ? (
-              <div className="p-4 bg-green-50 text-green-700 rounded-xl">
-                ✔ Responsável encontrado: <strong>{existingGuardian.nome}</strong>
-              </div>
+            {guardianCpf ? (
+              existingGuardian ? (
+                <div className="p-4 bg-green-50 text-green-700 rounded-xl">
+                  ✔ Responsável encontrado: <strong>{existingGuardian.nome}</strong>
+                </div>
+              ) : (
+                <div className="p-4 bg-amber-50 text-amber-700 rounded-xl">
+                  ⚠ Novo responsável será cadastrado
+                </div>
+              )
             ) : (
               <div className="p-4 bg-amber-50 text-amber-700 rounded-xl">
-                ⚠ Novo responsável será cadastrado
+                ⚠ Nenhum responsavel será registrado
               </div>
             )}
 
@@ -221,7 +227,7 @@ export default function Atendimento() {
               gender={sex}
             />
 
-            {!existingGuardian && (
+            {guardianCpf && !existingGuardian && (
               <>
                 <input
                   placeholder="Nome completo do responsável"

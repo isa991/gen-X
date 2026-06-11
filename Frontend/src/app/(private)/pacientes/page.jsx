@@ -8,20 +8,35 @@ import CPFInput from "@/components/CPFInput";
 import RiskBadge from "@/components/RiskBadge";
 
 import PatientService from "@/services/PatientService";
+import AttendanceService from "@/services/AttendanceService";
 
 export default function Pacientes() {
   const router = useRouter();
 
   const [cpfSearch, setCpfSearch] = useState("");
   const [patients, setPatients] = useState([]);
+  const [attendances, setAttendances] = useState([]);
 
   useEffect(() => {
     async function loadPatients() {
       const allPatients = await PatientService.getAll()
       setPatients(allPatients);
+
+      const allAttendances = await AttendanceService.getAll();
+      setAttendances(allAttendances);
     }
     loadPatients();
   }, []);
+
+  const formatCPF = (value = "") => {
+    const numbers = value.replace(/\D/g, "");
+
+    return numbers
+      .replace(/^(\d{3})(\d)/, "$1.$2")
+      .replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3")
+      .replace(/\.(\d{3})(\d)/, ".$1-$2")
+      .slice(0, 14);
+  };
 
   const handleSearch = () => {
     if (!cpfSearch.trim()) return;
@@ -94,21 +109,33 @@ export default function Pacientes() {
                 </thead>
 
                 <tbody>
-                  {patients.map((patient) => (
+                  {patients.map((patient) => {
+                    const patientAttendances = attendances.filter(
+                    (attendance) => attendance.paciente === patient.CPF_Paciente
+                  );
+
+                  const latestAttendance = patientAttendances.sort(
+                    (a, b) =>
+                      new Date(b.data_de_consulta) - new Date(a.data_de_consulta)
+                  )[0];
+
+                  const score = latestAttendance?.score_risco || 0;
+
+                  return (
                     <tr
                       key={patient.CPF_Paciente}
                       className="border-b hover:bg-slate-50"
                     >
                       <td className="p-3 text-slate-800">{patient.nome}</td>
 
-                      <td className="p-3 text-slate-800">{patient.CPF_Paciente}</td>
+                      <td className="p-3 text-slate-800">{formatCPF(patient.CPF_Paciente)}</td>
 
                       <td className="p-3 text-slate-800">
-                        {patient.riskScore || 0}%
+                        {score}%
                       </td>
 
                       <td className="p-3">
-                        <RiskBadge status={patient.status} />
+                        <RiskBadge status={score <= 44 ? "Baixo Risco" : score <= 76 ? "Risco Moderado" : "Alto Risco"} />
                       </td>
 
                       <td className="p-3">
@@ -122,7 +149,7 @@ export default function Pacientes() {
                         </button>
                       </td>
                     </tr>
-                  ))}
+                  );})}
                 </tbody>
               </table>
             </div>
