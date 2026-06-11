@@ -17,16 +17,11 @@ import {
 } from "recharts";
 
 import Header from "@/components/Header";
-import CPFInput from "@/components/CPFInput";
 
 import PatientService from "@/services/PatientService";
 
 export default function Dashboard() {
-  const router = useRouter();
-
-  const [cpf, setCpf] = useState("");
   const [patients, setPatients] = useState([]);
-
   const [stats, setStats] = useState({
     totalPatients: 0,
     calculatedScores: 0,
@@ -34,54 +29,53 @@ export default function Dashboard() {
     averageScore: 0,
   });
 
-  useEffect(() => {
-    const allPatients = PatientService.getAll();
+  useEffect(() => { 
+    async function loadPatients() {
+      const allPatients = await PatientService.getAll();
 
-    setPatients(allPatients);
+      setPatients(allPatients);
 
-    const totalPatients = allPatients.length;
+      /*
+      const calculatedScores = allPatients.filter(
+        (patient) => patient.riskScore !== undefined,
+      ).length;
 
-    const calculatedScores = allPatients.filter(
-      (patient) => patient.riskScore !== undefined,
-    ).length;
+      const highRiskPatients = allPatients.filter(
+        (patient) => patient.status === "Alto Risco",
+      ).length;
 
-    const highRiskPatients = allPatients.filter(
-      (patient) => patient.status === "Alto Risco",
-    ).length;
+      const totalScore = allPatients.reduce(
+        (sum, patient) => sum + (patient.riskScore || 0),
+        0,
+      );
 
-    const totalScore = allPatients.reduce(
-      (sum, patient) => sum + (patient.riskScore || 0),
-      0,
-    );
+      const averageScore =
+        totalPatients > 0 ? Math.round(totalScore / totalPatients) : 0;
+      */
 
-    const averageScore =
-      totalPatients > 0 ? Math.round(totalScore / totalPatients) : 0;
+      setStats({
+        totalPatients: allPatients.length,
+        calculatedScores: 0,
+        highRiskPatients: 0,
+        averageScore: 0,
+      })
+    }
 
-    setStats({
-      totalPatients,
-      calculatedScores,
-      highRiskPatients,
-      averageScore,
-    });
+    loadPatients();
   }, []);
-
-  const handleSearch = () => {
-    if (!cpf.trim()) return;
-    router.push(`/pacientes/${cpf}`);
-  };
-
+  
   const pieData = [
     {
       name: "Alto Risco",
-      value: patients.filter((p) => p.status === "Alto Risco").length,
+      value: 1// patients.filter((p) => p.status === "Alto Risco").length,
     },
     {
       name: "Risco Moderado",
-      value: patients.filter((p) => p.status === "Risco Moderado").length,
+      value: 1//patients.filter((p) => p.status === "Risco Moderado").length,
     },
     {
       name: "Baixo Risco",
-      value: patients.filter((p) => p.status === "Baixo Risco").length,
+      value: 1//patients.filter((p) => p.status === "Baixo Risco").length,
     },
   ];
 
@@ -101,9 +95,9 @@ export default function Dashboard() {
   };
 
   const scoreData = patients.slice(0, 8).map((patient) => ({
-    nome: patient.fullName?.split(" ")[0] || "Paciente",
+    nome: patient.nome?.split(" ")[0] || "Paciente",
     score: patient.riskScore || 0,
-    status: patient.status,
+    status: patient.status || "Não definido",
   }));
 
   return (

@@ -23,6 +23,11 @@ def get_pacientes(request):
     items = Paciente.objects.all()
     return Response(PacienteSerializer(items, many=True).data)
 
+@api_view(['GET'])
+def get_responsaveis(request):
+    items = Responsavel.objects.all()
+    return Response(ResponsavelSerializer(items, many=True).data)
+
 @api_view(['POST'])
 def post_historico_de_consulta(request):
     serializer = historico_de_consulta_Serializer(data=request.data)

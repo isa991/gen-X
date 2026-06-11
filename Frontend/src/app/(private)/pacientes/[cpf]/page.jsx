@@ -15,8 +15,11 @@ export default function PatientDetails() {
   const [patient, setPatient] = useState(null);
 
   useEffect(() => {
-    const found = PatientService.getByCpf(params.cpf);
-    setPatient(found || null);
+    async function findPatient() {
+      const found = await PatientService.getByCpf(params.cpf);
+      setPatient(found || null);
+    }
+    findPatient();
   }, [params.cpf]);
 
   if (!patient) {
@@ -55,7 +58,7 @@ export default function PatientDetails() {
   return (
     <main className="flex min-h-screen bg-slate-100">
       <section className="flex-1">
-        <Header title={patient.fullName} subtitle={`CPF: ${patient.cpf}`} />
+        <Header title={patient.nome} subtitle={`CPF: ${patient.cpf}`} />
 
         <div className="p-8 space-y-8">
           <div className="bg-white rounded-3xl shadow-sm p-8">
@@ -91,17 +94,17 @@ export default function PatientDetails() {
             <div className="mt-8 grid md:grid-cols-2 gap-6">
               <div className="bg-slate-50 rounded-2xl p-5">
                 <p className="text-sm text-slate-500">Nome completo</p>
-                <p className="text-lg font-semibold">{patient.fullName}</p>
+                <p className="text-lg font-semibold">{patient.nome}</p>
               </div>
 
               <div className="bg-slate-50 rounded-2xl p-5">
                 <p className="text-sm text-slate-500">CPF</p>
-                <p className="text-lg font-semibold">{patient.cpf}</p>
+                <p className="text-lg font-semibold">{patient.CPF_Paciente}</p>
               </div>
 
               <div className="bg-slate-50 rounded-2xl p-5">
                 <p className="text-sm text-slate-500">Sexo</p>
-                <p className="text-lg font-semibold">{patient.sex || "-"}</p>
+                <p className="text-lg font-semibold">{patient.sexo || "-"}</p>
               </div>
 
               <div className="bg-slate-50 rounded-2xl p-5">

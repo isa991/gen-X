@@ -13,5 +13,7 @@ urlpatterns = [
     path('cadastro-paciente/', views.cadastrar_paciente, name='cadastrar_paciente'),
     path('cadastro-responsavel/', views.cadastrar_Responsavel, name='cadastrar_responsavel'),
     path('adicionar-historico-de-consulta/', views.post_historico_de_consulta, name='post_historico_de_consulta'),
-    path('get-historico-de-consulta', views.get_historico_de_consulta, name='get_historico_de_consulta'),
+    path('get-historico-de-consulta/', views.get_historico_de_consulta, name='get_historico_de_consulta'),
+    path('get-pacientes/', views.get_pacientes, name='get_pacientes'),
+    path('get-responsaveis/', views.get_responsaveis, name='get_responsaveis')
 ]

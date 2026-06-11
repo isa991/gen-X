@@ -43,7 +43,7 @@ export default function Resultado() {
   return (
     <main className="flex min-h-screen bg-slate-100">
       <section className="flex-1">
-        <Header title="Resultado da Avaliação" subtitle={patient.fullName} />
+        <Header title="Resultado da Avaliação" subtitle={patient.nome} />
 
         <div className="p-8">
           <div className="bg-white rounded-3xl p-10 shadow-sm text-center">

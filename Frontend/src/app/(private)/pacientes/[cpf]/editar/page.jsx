@@ -10,7 +10,7 @@ import SymptomChecklist from "@/components/SymptomChecklist";
 import { symptoms } from "@/mock/symptoms";
 
 import PatientService from "@/services/PatientService";
-import { calculateScore, determineRisk } from "@/utils/calculateScore";
+import { calculateScore } from "@/utils/calculateScore";
 
 export default function EditPatient() {
   const params = useParams();
@@ -29,30 +29,33 @@ export default function EditPatient() {
   const [selectedSymptoms, setSelectedSymptoms] = useState([]);
 
   useEffect(() => {
-    const patient = PatientService.getByCpf(params.cpf);
+    async function getInfo() {
+      const patient = PatientService.getByCpf(params.cpf);
 
-    if (patient) {
-      setOriginalCpf(patient.cpf);
+      if (patient) {
+        setOriginalCpf(patient.CPF_Paciente);
 
-      setName(patient.fullName || "");
-      setCpf(patient.cpf || "");
-      setGuardian(patient.guardian || "");
-      setSex(patient.sex || "");
-      setDescription(patient.description || "");
+        setName(patient.nome || "");
+        setCpf(patient.CPF_Paciente || "");
+        setGuardian(patient.guardian || "");
+        setSex(patient.sexo || "");
+        setDescription(patient.description || "");
 
-      setSelectedSymptoms(patient.symptoms || []);
+        setSelectedSymptoms(patient.symptoms || []);
+      }
+
+      setLoading(false);
     }
-
-    setLoading(false);
+    getInfo();
   }, [params.cpf]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const allPatients = PatientService.getAll();
+    const allPatients = await PatientService.getAll();
 
     const duplicatedCpf = allPatients.find(
-      (p) => p.cpf === cpf && p.cpf !== originalCpf,
+      (p) => p.CPF_Paciente === cpf && p.CPF_Paciente !== originalCpf,
     );
 
     if (duplicatedCpf) {
@@ -61,20 +64,17 @@ export default function EditPatient() {
     }
 
     const score = calculateScore(selectedSymptoms);
-    const status = determineRisk(score);
 
-    const originalPatient = PatientService.getByCpf(originalCpf);
+    const originalPatient = await PatientService.getByCpf(originalCpf);
 
     const updatedPatient = {
       ...originalPatient,
-      fullName: name,
-      cpf,
-      guardian,
-      sex,
-      description,
-      symptoms: selectedSymptoms,
-      riskScore: score,
-      status,
+      nome: name,
+      CPF_Paciente: cpf,
+      sexo: sex,
+      descricao: description,
+      sintomas: selectedSymptoms,
+      score_risco: score,
     };
 
     PatientService.update(originalCpf, updatedPatient);

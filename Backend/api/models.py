@@ -42,6 +42,7 @@ class historico_de_consulta(models.Model):
     id_consulta = models.AutoField(primary_key=True)
     data_de_consulta = models.DateField()
     sintomas = models.CharField(max_length=250)
+    score_risco = models.IntegerField()
     
     # Foreign Keys
     paciente = models.ForeignKey(Paciente,on_delete=models.CASCADE,related_name='consultas',db_column='CPF_Paciente',to_field='CPF_Paciente')

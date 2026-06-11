@@ -15,8 +15,11 @@ export default function RelatorioPaciente() {
   const [patient, setPatient] = useState(null);
 
   useEffect(() => {
-    const found = PatientService.getByCpf(params.cpf);
-    setPatient(found || null);
+    async function findPatient() {
+      const found = await PatientService.getByCpf(params.cpf);
+      setPatient(found || null);
+    }
+    findPatient();
   }, [params.cpf]);
 
   if (!patient) {
@@ -45,12 +48,12 @@ export default function RelatorioPaciente() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <p>Nome</p>
-                  <p className="font-medium">{patient.fullName}</p>
+                  <p className="font-medium">{patient.nome}</p>
                 </div>
 
                 <div>
                   <p>CPF</p>
-                  <p className="font-medium">{patient.cpf}</p>
+                  <p className="font-medium">{patient.CPF_Paciente}</p>
                 </div>
 
                 <div>

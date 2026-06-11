@@ -16,7 +16,11 @@ export default function Pacientes() {
   const [patients, setPatients] = useState([]);
 
   useEffect(() => {
-    setPatients(PatientService.getAll());
+    async function loadPatients() {
+      const allPatients = await PatientService.getAll()
+      setPatients(allPatients);
+    }
+    loadPatients();
   }, []);
 
   const handleSearch = () => {
@@ -92,12 +96,12 @@ export default function Pacientes() {
                 <tbody>
                   {patients.map((patient) => (
                     <tr
-                      key={patient.cpf}
+                      key={patient.CPF_Paciente}
                       className="border-b hover:bg-slate-50"
                     >
-                      <td className="p-3 text-slate-800">{patient.fullName}</td>
+                      <td className="p-3 text-slate-800">{patient.nome}</td>
 
-                      <td className="p-3 text-slate-800">{patient.cpf}</td>
+                      <td className="p-3 text-slate-800">{patient.CPF_Paciente}</td>
 
                       <td className="p-3 text-slate-800">
                         {patient.riskScore || 0}%
@@ -110,7 +114,7 @@ export default function Pacientes() {
                       <td className="p-3">
                         <button
                           onClick={() =>
-                            router.push(`/pacientes/${patient.cpf}`)
+                            router.push(`/pacientes/${patient.CPF_Paciente}`)
                           }
                           className="px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
                         >

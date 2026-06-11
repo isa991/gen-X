@@ -22,27 +22,30 @@ export default function Relatorios() {
   });
 
   useEffect(() => {
-    const all = PatientService.getAll();
-    setPatients(all);
+    async function loadPatient() {
+      const all = await PatientService.getAll();
+      setPatients(all);
 
-    const highRisk = all.filter((p) => p.status === "Alto Risco").length;
-    const moderateRisk = all.filter(
-      (p) => p.status === "Risco Moderado",
-    ).length;
-    const lowRisk = all.filter((p) => p.status === "Baixo Risco").length;
+      const highRisk = all.filter((p) => p.status === "Alto Risco").length;
+      const moderateRisk = all.filter(
+        (p) => p.status === "Risco Moderado",
+      ).length;
+      const lowRisk = all.filter((p) => p.status === "Baixo Risco").length;
 
-    const totalScore = all.reduce((sum, p) => sum + (p.riskScore || 0), 0);
+      const totalScore = all.reduce((sum, p) => sum + (p.riskScore || 0), 0);
 
-    const averageScore =
-      all.length > 0 ? Math.round(totalScore / all.length) : 0;
+      const averageScore =
+        all.length > 0 ? Math.round(totalScore / all.length) : 0;
 
-    setStatistics({
-      total: all.length,
-      highRisk,
-      moderateRisk,
-      lowRisk,
-      averageScore,
-    });
+      setStatistics({
+        total: all.length,
+        highRisk,
+        moderateRisk,
+        lowRisk,
+        averageScore,
+      });
+    }
+    loadPatient();
   }, []);
 
   return (
@@ -87,12 +90,12 @@ export default function Relatorios() {
               <tbody>
                 {patients.map((patient) => (
                   <tr
-                    key={patient.cpf}
+                    key={patient.CPF_Paciente}
                     className="border-b hover:bg-slate-50 transition"
                   >
-                    <td className="p-3 text-slate-800">{patient.fullName}</td>
+                    <td className="p-3 text-slate-800">{patient.nome}</td>
 
-                    <td className="p-3 text-slate-700">{patient.cpf}</td>
+                    <td className="p-3 text-slate-700">{patient.CPF_Paciente}</td>
 
                     <td className="p-3 text-slate-700">
                       {patient.riskScore || 0}%
@@ -105,7 +108,7 @@ export default function Relatorios() {
                     <td className="p-3">
                       <button
                         onClick={() =>
-                          router.push(`/pacientes/${patient.cpf}/relatorio`)
+                          router.push(`/pacientes/${patient.CPF_Paciente}/relatorio`)
                         }
                         className="px-3 py-1 bg-green-600 text-white rounded-lg"
                       >
