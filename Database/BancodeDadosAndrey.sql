@@ -11,7 +11,8 @@ create table Paciente(
 	CPF_Paciente varchar(11) primary key not null,
   nome varchar(50),
   data_de_nascimento date,
-  sexo Varchar(15)
+  sexo Varchar(15),
+  foto_do_paciente MEDIUMBLOB
 );
 
 create table Responsavel(
@@ -35,11 +36,13 @@ create table historico_de_consulta (
   CPF_Paciente varchar(11),
   CPF_Responsavel varchar(11),
   id_medico int,
+  score_do_paciente int,
   sintomas varchar(250),
   score_risco int,
   FOREIGN KEY (CPF_Paciente) REFERENCES Paciente(CPF_Paciente),
   FOREIGN KEY (CPF_Responsavel) REFERENCES Responsavel(CPF_Responsavel),
   FOREIGN KEY (id_medico) REFERENCES Medico(id_medico)
+	
 );
 
 INSERT INTO ListadeSintomas (sintoma, peso_masc, peso_fem) VALUES
