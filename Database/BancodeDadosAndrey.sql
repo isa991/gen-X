@@ -4,15 +4,24 @@ use Hospital;
 create table Medico(
   crm varchar(10) primary key,
   email_medico varchar(30),
-  senha varchar(50)
+  senha varchar(50),
+  status boolean
 );
 
 create table Paciente(
   CPF_Paciente varchar(11) primary key not null,
   nome varchar(50),
   data_de_nascimento date,
-  sexo varchar(15),
-  foto_do_paciente varchar(255)
+  sexo Varchar(15),
+  grau_de_parentesco Varchar(15),
+  status boolean
+);
+create table FotoPaciente(
+    id_foto int primary key auto_increment,
+    CPF_Paciente varchar(11),
+    tipo_foto varchar(20),
+    caminho_foto varchar(255),
+    foreign key (CPF_Paciente) references Paciente(CPF_Paciente)
 );
 
 create table Responsavel(
@@ -35,7 +44,7 @@ create table historico_de_consulta (
   data_de_consulta date,
   CPF_Paciente varchar(11),
   CPF_Responsavel varchar(11),
-  id_medico int,
+  cmr int,
   score_do_paciente int,
   sintomas varchar(250),
   score_risco int,
