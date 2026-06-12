@@ -2,8 +2,7 @@ create database Hospital;
 use Hospital;
 
 create table Medico(
-  id_medico int primary key AUTO_INCREMENT,
-  crm varchar(10),
+  crm varchar(10) primary key,
   email_medico varchar(30),
   senha varchar(50)
 );
