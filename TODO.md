@@ -10,6 +10,10 @@
 
 - [X] Readicionar contagem de riscos no Dashboard
 - [X] Corrigir problemas de API nas abas relacionadas aos pacientes
+- [ ] Modificar informações da conta pela página de configurações
+- [ ] Adicionar foto na ficha do paciente
+- [ ] Adicionar campo para adicionar foto no cadastro de paciente
+- [ ] Adicionar recomendação de exame na ficha do paciente
 
 ## Cleanup
 
