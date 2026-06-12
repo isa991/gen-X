@@ -9,5 +9,6 @@ dependencies = [
     "django>=6.0.5",
     "django-cors-headers>=4.9.0",
     "djangorestframework>=3.17.1",
+    "pillow>=12.2.0",
     "pymysql>=1.1.3",
 ]

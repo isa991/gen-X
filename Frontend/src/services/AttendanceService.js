@@ -1,13 +1,20 @@
 const API_ENDPOINT = "http://127.0.0.1:8000/api";
 
+import { authFetch } from "./authFetch";
 import PatientService from "./PatientService";
 import GuardainService from "./GuardianService";
+
+async function getMedicoByCrm(crm) {
+  const response = await authFetch(`${API_ENDPOINT}/medico/?crm=${crm}`);
+  const data = await response.json();
+  return data.id_medico;
+}
 
 async function getAll() {
   if (typeof window === "undefined") return [];
 
   try {
-    const response = await fetch(`${API_ENDPOINT}/get-historico-de-consulta`);
+    const response = await authFetch(`${API_ENDPOINT}/get-historico-de-consulta/`);
 
     if (!response.ok) {
       throw new Error("Failed to fetch attendances");
@@ -22,7 +29,6 @@ async function getAll() {
 
 async function getAllByCpf(cpf) {
   const attendances = await getAll();
-
   return attendances.filter((a) => a.paciente === cpf);
 }
 
@@ -30,8 +36,7 @@ async function getByCpf(cpf) {
   const attendances = await getAllByCpf(cpf);
 
   const sortedAttendances = attendances.sort(
-    (a, b) =>
-      new Date(b.data_de_consulta) - new Date(a.data_de_consulta)
+    (a, b) => new Date(b.data_de_consulta) - new Date(a.data_de_consulta)
   );
 
   return sortedAttendances[0];
@@ -39,16 +44,12 @@ async function getByCpf(cpf) {
 
 async function getById(id) {
   const attendances = await getAll();
-
   return attendances.find((a) => a.id_consulta === parseInt(id));
 }
 
 async function postJson(url, payload, errorLabel) {
-  const response = await fetch(url, {
+  const response = await authFetch(url, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(payload),
   });
 
@@ -111,9 +112,11 @@ async function registerAttendance(data) {
     );
   }
 
+  const doctor = await getMedicoByCrm(String(data.crm || "").replace(/\D/g, ""));
+
   const evaluation = {
     data_de_consulta: new Date().toISOString().slice(0, 10),
-    medico: parseInt(String(data.crm || "").replace(/\D/g, ""), 10),
+    medico: doctor,
     paciente: cleanedPatientCpf,
     responsavel: cleanedGuardianCpf || null,
     sintomas: Array.isArray(data.sintomas) ? data.sintomas.join(", ") : "",

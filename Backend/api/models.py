@@ -1,11 +1,27 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
+
+class Usuario(AbstractUser):
+    """
+    Custom user model with role management
+    """
+    ROLE_CHOICES = [
+        ('admin', 'Administrador'),
+        ('medico', 'Médico'),
+    ]
+    
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='medico')
+    
+    class Meta:
+        db_table = 'Usuario'
 
 class Medico(models.Model):
     id_medico = models.AutoField(primary_key=True)
     email_medico = models.CharField(max_length=254)
     senha = models.CharField(max_length=50)
+    crm = models.CharField(max_length=10)
     
     class Meta:
         db_table = 'Medico'
@@ -15,6 +31,7 @@ class Paciente(models.Model):
     nome = models.CharField(max_length=50)
     data_de_nascimento = models.DateField()
     sexo = models.CharField(max_length=15)
+    foto_do_paciente = models.ImageField(upload_to='pacientes/fotos/', null=True, blank=True)
     
     class Meta:
         db_table = 'Paciente'

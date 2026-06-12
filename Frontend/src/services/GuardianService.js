@@ -1,10 +1,12 @@
-const API_ENDPOINT = "http://127.0.0.1:8000/api"
+const API_ENDPOINT = "http://127.0.0.1:8000/api";
+
+import { authFetch } from "./authFetch";
 
 async function getAll() {
   if (typeof window === "undefined") return [];
 
   try {
-    const response = await fetch(`${API_ENDPOINT}/get-responsaveis`);
+    const response = await authFetch(`${API_ENDPOINT}/get-responsaveis/`);
 
     if (!response.ok) {
       throw new Error("Failed to fetch guardians");
@@ -18,10 +20,10 @@ async function getAll() {
 }
 
 async function getByCpf(cpf) {
-  const patients = await getAll();
+  const guardians = await getAll();
 
-  return patients.find(
-    (p) => p.CPF_Responsavel === String(cpf).replace(/\D/g, "")
+  return guardians.find(
+    (g) => g.CPF_Responsavel === String(cpf).replace(/\D/g, "")
   );
 }
 

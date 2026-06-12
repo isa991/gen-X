@@ -3,23 +3,30 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-
 import { useAuth } from "@/context/AuthContext";
 
 export default function Login() {
   const router = useRouter();
-
   const { login } = useAuth();
 
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setError("");
+    setLoading(true);
 
-    login(email);
-
-    router.push("/dashboard");
+    try {
+      await login(username, password);
+      router.push("/dashboard");
+    } catch (err) {
+      setError(err.message || "Credenciais inválidas. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -27,19 +34,12 @@ export default function Login() {
       <div className="w-full max-w-md">
         <div className="bg-white rounded-3xl shadow-xl border border-slate-200 p-10">
           <div className="flex justify-center mb-8">
-            <Image
-              src="/genX_logo.png"
-              alt="GenX"
-              width={130}
-              height={130}
-              priority
-            />
+            <Image src="/genX_logo.png" alt="GenX" width={130} height={130} priority />
           </div>
 
           <h1 className="text-3xl font-bold text-center text-slate-800">
             Acesso à Plataforma
           </h1>
-
           <p className="text-center text-slate-500 mt-3 mb-8">
             Entre com suas credenciais para acessar o sistema.
           </p>
@@ -47,14 +47,13 @@ export default function Login() {
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
-                E-mail institucional
+                Usuário
               </label>
-
               <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="nome@instituicao.com"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="seu.usuario"
                 className="w-full border border-slate-300 rounded-xl p-3 text-slate-800 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
@@ -64,7 +63,6 @@ export default function Login() {
               <label className="block text-sm font-medium text-slate-700 mb-2">
                 Senha
               </label>
-
               <input
                 type="password"
                 value={password}
@@ -75,11 +73,18 @@ export default function Login() {
               />
             </div>
 
+            {error && (
+              <p className="text-red-500 text-sm text-center bg-red-50 border border-red-200 rounded-xl p-3">
+                {error}
+              </p>
+            )}
+
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium transition"
+              disabled={loading}
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white py-3 rounded-xl font-medium transition"
             >
-              Entrar
+              {loading ? "Entrando..." : "Entrar"}
             </button>
           </form>
 

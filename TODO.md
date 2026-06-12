@@ -8,8 +8,8 @@
 
 ## Pro frontend funcionar
 
-- [ ] Readicionar contagem de riscos no Dashboard
-- [ ] Corrigir problemas de API nas abas relacionadas aos pacientes
+- [X] Readicionar contagem de riscos no Dashboard
+- [X] Corrigir problemas de API nas abas relacionadas aos pacientes
 
 ## Cleanup
 

@@ -3,6 +3,7 @@ use Hospital;
 
 create table Medico(
   id_medico int primary key AUTO_INCREMENT,
+  crm varchar(10),
   email_medico varchar(30),
   senha varchar(50)
 );
@@ -58,9 +59,3 @@ INSERT INTO ListadeSintomas (sintoma, peso_masc, peso_fem) VALUES
 ("Evita contato visual", 6, 8),
 ("Evita contato físico", 4, 7),
 ("Agressividade", 1, 2);
-
-CREATE USER 'admin_ti'@'localhost' IDENTIFIED BY 'admin123';
-GRANT ALL PRIVILEGES ON Hospital.* TO 'admin_ti'@'localhost';
-
-CREATE USER 'medico'@'localhost' IDENTIFIED BY 'medico123';
-GRANT SELECT, INSERT, UPDATE, DELETE ON Hospital.* TO 'medico'@'localhost';
