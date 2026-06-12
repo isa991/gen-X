@@ -4,6 +4,8 @@ const API_ENDPOINT = "http://127.0.0.1:8000/api";
 
 import { useEffect, useState } from "react";
 
+import { authFetch } from "@/services/authFetch";
+
 export default function SymptomChecklist({
   selectedSymptoms,
   setSelectedSymptoms,
@@ -15,7 +17,7 @@ export default function SymptomChecklist({
   useEffect(() => {
     const getSymptoms = async () => {
       try {
-        const response = await fetch(`${API_ENDPOINT}/sintomas`);
+        const response = await authFetch(`${API_ENDPOINT}/sintomas`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch symptoms");

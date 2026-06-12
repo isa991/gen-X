@@ -31,9 +31,9 @@ export default function Relatorios() {
       const allAttendances = await AttendanceService.getAll();
       setAttendances(allAttendances);
 
-      const highRisk = allAttendances.filter((a) => a.score_risco >= 77 ? "Alto Risco" : "").length;
-      const moderateRisk = allAttendances.filter((a) => a.score_risco >= 45 && a.score_risco <= 76 ? "Risco Moderado" : "").length;
-      const lowRisk = allAttendances.filter((a) => a.score_risco >= 0 && a.score_risco <= 44 ? "Baixo Risco" : "").length;
+      const highRisk = allAttendances.filter((a) => a.score_risco >= 70 ? "Alto Risco" : "").length;
+      const moderateRisk = allAttendances.filter((a) => a.score_risco >= 40 && a.score_risco <= 69 ? "Risco Moderado" : "").length;
+      const lowRisk = allAttendances.filter((a) => a.score_risco >= 0 && a.score_risco <= 39 ? "Baixo Risco" : "").length;
 
       const totalScore = allAttendances.reduce((sum, a) => sum + (a.score_risco || 0), 0);
 

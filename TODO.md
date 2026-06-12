@@ -4,7 +4,7 @@
 
 - [X] Implementar Score dos sintomas no histórico de consulta.
 - [X] Implementar views para as diferentes coisas que o projeto pode fazer com os dados do DB
-- [ ] Implementar login de usuários e acessos ao DB
+- [X] Implementar login de usuários e acessos ao DB
 
 ## Pro frontend funcionar
 

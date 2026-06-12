@@ -135,7 +135,7 @@ export default function Pacientes() {
                       </td>
 
                       <td className="p-3">
-                        <RiskBadge status={score <= 44 ? "Baixo Risco" : score <= 76 ? "Risco Moderado" : "Alto Risco"} />
+                        <RiskBadge status={score <= 40 ? "Baixo Risco" : score <= 70 ? "Risco Moderado" : "Alto Risco"} />
                       </td>
 
                       <td className="p-3">

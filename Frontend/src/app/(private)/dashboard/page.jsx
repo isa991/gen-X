@@ -68,15 +68,15 @@ export default function Dashboard() {
   const pieData = [
     {
       name: "Alto Risco",
-      value: attendances.filter((a) => a.score_risco >= 77).length,
+      value: attendances.filter((a) => a.score_risco >= 70).length,
     },
     {
       name: "Risco Moderado",
-      value: attendances.filter((a) => a.score_risco >= 45 && a.score_risco <= 76).length,
+      value: attendances.filter((a) => a.score_risco >= 40 && a.score_risco <= 69).length,
     },
     {
       name: "Baixo Risco",
-      value: attendances.filter((a) => a.score_risco >= 0 && a.score_risco <= 44).length,
+      value: attendances.filter((a) => a.score_risco >= 0 && a.score_risco <= 39).length,
     },
   ];
 

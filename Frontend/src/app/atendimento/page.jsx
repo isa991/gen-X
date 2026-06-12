@@ -43,7 +43,7 @@ export default function Atendimento() {
   };
 
   const formatCRM = (value) => {
-    return value.replace(/\D/g, "").slice(0, 6);
+    return "CRM" + value.replace(/\D/g, "").slice(0, 5);
   };
 
   const formatPhone = (value) => {
