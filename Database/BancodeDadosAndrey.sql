@@ -9,15 +9,15 @@ create table Medico(
 );
 
 create table Paciente(
-	CPF_Paciente varchar(11) primary key not null,
+  CPF_Paciente varchar(11) primary key not null,
   nome varchar(50),
   data_de_nascimento date,
-  sexo Varchar(15),
-  foto_do_paciente MEDIUMBLOB
+  sexo varchar(15),
+  foto_do_paciente varchar(255)
 );
 
 create table Responsavel(
-	CPF_Responsavel varchar(11) primary key not null,
+  CPF_Responsavel varchar(11) primary key not null,
   nome varchar(50),
   data_de_nascimento date,
   sexo varchar(50),
@@ -32,7 +32,7 @@ create table ListadeSintomas(
 );
 
 create table historico_de_consulta (
-	id_consulta int primary key AUTO_INCREMENT,
+  id_consulta int primary key AUTO_INCREMENT,
   data_de_consulta date,
   CPF_Paciente varchar(11),
   CPF_Responsavel varchar(11),

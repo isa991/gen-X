@@ -8,10 +8,13 @@ export async function authFetch(url, options = {}) {
   const token = getCookie("authToken");
 
   const headers = {
-    "Content-Type": "application/json",
     ...(token ? { Authorization: `Token ${token}` } : {}),
     ...options.headers,
   };
+
+  if (!(options?.body instanceof FormData)) {
+    headers["Content-Type"] = "application/json";
+  }
 
   return fetch(url, { ...options, headers });
 }

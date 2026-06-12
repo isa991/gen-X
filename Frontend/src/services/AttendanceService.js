@@ -4,6 +4,30 @@ import { authFetch } from "./authFetch";
 import PatientService from "./PatientService";
 import GuardainService from "./GuardianService";
 
+async function postFormData(url, payload, errorLabel) {
+  const formData = new FormData();
+
+  Object.entries(payload).forEach(([key, value]) => {
+    // Skip null/undefined, but keep empty strings and 0
+    if (value !== null && value !== undefined) {
+      formData.append(key, value);
+    }
+  });
+
+  const response = await authFetch(url, {
+    method: "POST",
+    body: formData,
+  });
+
+  const body = await response.json().catch(() => null);
+
+  if (!response.ok) {
+    throw new Error(`${errorLabel}: ${JSON.stringify(body)}`);
+  }
+
+  return body;
+}
+
 async function getMedicoByCrm(crm) {
   const response = await authFetch(`${API_ENDPOINT}/medico/?crm=${crm}`);
   const data = await response.json();
@@ -83,9 +107,10 @@ async function registerAttendance(data) {
       nome: data.nome_paciente || "",
       sexo: data.sexo_paciente || "",
       data_de_nascimento: data.data_de_nascimento_paciente || "",
+      foto_do_paciente: data.foto_do_paciente || null,
     };
 
-    await postJson(
+    await postFormData(
       `${API_ENDPOINT}/cadastro-paciente/`,
       newPatient,
       "Cadastro paciente error"

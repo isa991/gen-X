@@ -24,6 +24,7 @@ export default function Atendimento() {
   const [fullName, setFullName] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [sex, setSex] = useState("");
+  const [profilePic, setProfilePic] = useState("");
 
   const [guardianFullName, setGuardianFullName] = useState("");
   const [guardianBirthDate, setGuardianBirthDate] = useState("");
@@ -92,6 +93,7 @@ export default function Atendimento() {
         nome_paciente: existingPatient?.nome || fullName,
         sexo_paciente: sex,
         data_de_nascimento_paciente: birthDate,
+        foto_do_paciente: profilePic,
         CPF_Responsavel: guardianCpf,
         nome_responsavel: existingGuardian?.nome || guardianFullName,
         data_de_nascimento_responsavel: guardianBirthDate,
@@ -217,6 +219,21 @@ export default function Atendimento() {
                   <option value="Masculino">Masculino</option>
                   <option value="Feminino">Feminino</option>
                 </select>
+
+                <input
+                  type="file"
+                  onChange={(e) => setProfilePic(e.target.files[0] ?? null)}
+                  accept="image/*"
+                  className="
+                    relative w-full h-32
+                    bg-gray-100 border rounded-xl p-3
+                    cursor-pointer text-sm text-gray-500 text-center
+                    file:absolute file:top-2 file:right-2
+                    file:rounded-md file:border-0
+                    file:bg-gray-300 file:text-xs file:font-medium file:text-gray-700
+                    file:px-3 file:py-1 file:cursor-pointer
+                  "
+                />
               </>
             )}
 
