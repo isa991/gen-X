@@ -2,14 +2,24 @@
 
 ## Pro servidor funcionar
 
-- [ ] Implementar Score dos sintomas no histórico de consulta.
-- [ ] Implementar views para as diferentes coisas que o projeto pode fazer com os dados do DB
-- [ ] Implementar login de usuários e acessos ao DB
+- [X] Implementar Score dos sintomas no histórico de consulta.
+- [X] Implementar views para as diferentes coisas que o projeto pode fazer com os dados do DB
+- [X] Implementar login de usuários e acessos ao DB
+
+## Pro frontend funcionar
+
+- [X] Readicionar contagem de riscos no Dashboard
+- [X] Corrigir problemas de API nas abas relacionadas aos pacientes
+- [ ] Modificar informações da conta pela página de configurações
+- [ ] Adicionar foto na ficha do paciente
+- [ ] Adicionar campo para adicionar foto no cadastro de paciente
+- [ ] Adicionar recomendação de exame na ficha do paciente
 
 ## Cleanup
 
-- [ ] Mudar o jeito que o servidor se conecta ao DB (para facil implementação no hospital mesmo)
+- [x] Mudar o jeito que o servidor se conecta ao DB (para facil implementação no hospital mesmo)
 - [ ] Remover o compose.yaml
 - [ ] Pegar as dependencias e fazer um requirements.txt
 - [ ] Remover as coisas do UV
 - [ ] Fazer um script pra montar o servidor certinho
+- [ ] Gravar o video mostrando como rodar certinho
