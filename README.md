@@ -87,19 +87,31 @@ docker exec -it mysql-container mysql -u root -p Hospital
 
 ### 2. Backend
 
+Se for sua primeira vez rodando o servidor, é necessário criar um Superusuário (superuser) para fazer as configurações necessárias. Para isso rode os seguintes comandos:
+
 ```sh
 cd Backend
-uv run manage.py runserver
+uv run manage.py createsuperuser
 ```
 
-Caso haja mudanças nos modelos (`api/models.py`), aplique as migrações antes:
+Informe um nome de usuário (por exemplo: 'admin'), um email, e uma senha.
+
+Após isso, rode os comandos abaixo para fazer as migrações dos modelos do backend (`api/models.py`)
 
 ```sh
 uv run manage.py makemigrations
 uv run manage.py migrate
 ```
 
-O backend ficará disponível em `http://localhost:8000`.
+(Caso haja mudanças nesses modelos, é necessário rodar esses comandos novamente)
+
+Após isso, rode o comando abaixo para iniciar o backend
+
+```sh
+uv run manage.py runserver
+```
+
+O backend ficará disponível em `http://localhost:8000`, e quando o Frontend estiver ativo, você poderá fazer login como Superusuário, tendo acesso as configurações do sistema, onde é possivel cadastrar médicos com nome de usuário, CRM, email e senha.
 
 ### 3. Frontend
 

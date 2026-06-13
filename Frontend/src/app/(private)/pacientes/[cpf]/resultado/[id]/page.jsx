@@ -82,6 +82,15 @@ export default function Resultado() {
             >
               {status}
             </span>
+            {
+              (attendance?.score_risco >= 56 && patient.sexo == "Masculino") ||
+              (attendance?.score_risco >= 55 && patient.sexo == "Feminino") ?
+              (
+                <div className="text-2xl text-slate-500 mt-2 font-bold">
+                  Recomenda-se encaminhar para exame
+                </div>
+              ) : ""
+            }
           </div>
         </div>
       </section>

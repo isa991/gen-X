@@ -72,7 +72,7 @@ export default function EditPatient() {
 
     PatientService.update(originalCpf, updatedPatient);
 
-    router.push(`/pacientes/${updatedPatient.cpf}`);
+    router.push(`/pacientes/${updatedPatient.CPF_Paciente}`);
   };
 
   if (loading) {

@@ -200,6 +200,15 @@ export default function PatientDetails() {
               <div>
                 <p className="text-sm text-slate-500 mb-2">Classificação</p>
                 <RiskBadge status={recentAttendance?.score_risco <= 40 ? "Baixo Risco" : recentAttendance?.score_risco <= 70 ? "Risco Moderado" : "Alto Risco"} />
+                <p className="text-sm text-slate-500 mt-2">
+                  <strong>
+                    {
+                      (recentAttendance?.score_risco >= 56 && patient.sexo == "Masculino") ||
+                      (recentAttendance?.score_risco >= 55 && patient.sexo == "Feminino") ?
+                      "Recomenda-se encaminhar para exame" : ""
+                    }
+                  </strong>
+                </p>
               </div>
 
               <button

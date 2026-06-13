@@ -2,7 +2,10 @@
 
 import { useRouter } from "next/navigation";
 
+import { useAuth } from "@/context/AuthContext";
+
 export default function Sidebar() {
+  const { user } = useAuth();
   const router = useRouter();
 
   return (
@@ -33,12 +36,14 @@ export default function Sidebar() {
             Relatórios
           </button>
 
+          { user?.role === "admin" && (
           <button
             onClick={() => router.push("/configuracoes")}
             className="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-800 transition"
           >
             Configurações
           </button>
+          )}
         </nav>
       </div>
 

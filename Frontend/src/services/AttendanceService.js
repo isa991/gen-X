@@ -3,6 +3,7 @@ const API_ENDPOINT = "http://127.0.0.1:8000/api";
 import { authFetch } from "./authFetch";
 import PatientService from "./PatientService";
 import GuardainService from "./GuardianService";
+import DoctorService from "./DoctorService";
 
 async function postFormData(url, payload, errorLabel) {
   const formData = new FormData();
@@ -28,11 +29,7 @@ async function postFormData(url, payload, errorLabel) {
   return body;
 }
 
-async function getMedicoByCrm(crm) {
-  const response = await authFetch(`${API_ENDPOINT}/medico/?crm=${crm}`);
-  const data = await response.json();
-  return data.id_medico;
-}
+
 
 async function getAll() {
   if (typeof window === "undefined") return [];
@@ -137,11 +134,11 @@ async function registerAttendance(data) {
     );
   }
 
-  const doctor = await getMedicoByCrm(String(data.crm || "").replace(/\D/g, ""));
+  const doctor = await DoctorService.getByCrm(String(data.crm || "").replace(/\D/g, ""));
 
   const evaluation = {
     data_de_consulta: new Date().toISOString().slice(0, 10),
-    medico: doctor,
+    medico: doctor.id_medico,
     paciente: cleanedPatientCpf,
     responsavel: cleanedGuardianCpf || null,
     sintomas: Array.isArray(data.sintomas) ? data.sintomas.join(", ") : "",

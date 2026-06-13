@@ -44,7 +44,7 @@ export default function Atendimento() {
   };
 
   const formatCRM = (value) => {
-    return "CRM" + value.replace(/\D/g, "").slice(0, 5);
+    return value.replace(/\D/g, "").slice(0, 6);
   };
 
   const formatPhone = (value) => {
@@ -140,7 +140,7 @@ export default function Atendimento() {
 
             <button
               onClick={handleIdentify}
-              className="w-full bg-blue-600 text-white py-3 rounded-xl"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl transition"
             >
               Continuar
             </button>
@@ -181,7 +181,7 @@ export default function Atendimento() {
 
             <button
               onClick={() => setStep(3)}
-              className="w-full bg-blue-600 text-white py-3 rounded-xl"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl transition"
             >
               Prosseguir
             </button>
@@ -281,7 +281,7 @@ export default function Atendimento() {
 
             <button
               onClick={handleSave}
-              className="w-full bg-green-600 text-white py-3 rounded-xl"
+              className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl transition"
             >
               Salvar Atendimento
             </button>

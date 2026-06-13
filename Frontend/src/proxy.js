@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 
 const PUBLIC_ROUTES = ["/", "/login"];
+const ROLE_PROTECTED = {"/(private)/configuracoes/": ["admin"]}
 
 export function proxy(request) {
   const { pathname } = request.nextUrl;
@@ -13,12 +14,20 @@ export function proxy(request) {
 
   // Check for auth token in cookies
   const token = request.cookies.get("authToken")?.value;
+  const role = request.cookies.get("userRole")?.value;
 
   if (!token) {
     const loginUrl = new URL("/login", request.url);
     // Preserve the intended destination so you can redirect back after login
     loginUrl.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(loginUrl);
+  }
+
+  const matchedRoute = Object.keys(ROLE_PROTECTED).find((route) =>
+    pathname.startsWith(route)
+  );
+  if (matchedRoute && !ROLE_PROTECTED[matchedRoute].includes(role)) {
+    return NextResponse.redirect(new URL("/unauthorized", request.url));
   }
 
   return NextResponse.next();
