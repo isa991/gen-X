@@ -30,7 +30,7 @@ create table Responsavel(
   data_de_nascimento date,
   sexo varchar(50),
   telefone varchar(20),
-  grau_de_parentesco Varchar(20),
+  grau_de_parentesco varchar(20),
 );
 
 create table ListadeSintomas(
