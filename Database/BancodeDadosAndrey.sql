@@ -47,7 +47,6 @@ create table historico_de_consulta (
   crm int,
   score_do_paciente int,
   sintomas varchar(250),
-  score_risco int,
   FOREIGN KEY (CPF_Paciente) REFERENCES Paciente(CPF_Paciente),
   FOREIGN KEY (CPF_Responsavel) REFERENCES Responsavel(CPF_Responsavel),
   FOREIGN KEY (cmr) REFERENCES Medico(crm)
