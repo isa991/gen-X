@@ -50,7 +50,7 @@ create table historico_de_consulta (
   score_risco int,
   FOREIGN KEY (CPF_Paciente) REFERENCES Paciente(CPF_Paciente),
   FOREIGN KEY (CPF_Responsavel) REFERENCES Responsavel(CPF_Responsavel),
-  FOREIGN KEY (cmr) REFERENCES Medico(cmr)
+  FOREIGN KEY (cmr) REFERENCES Medico(crm)
 	
 );
 
