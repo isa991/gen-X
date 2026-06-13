@@ -27,7 +27,26 @@ async function getByCpf(cpf) {
   );
 }
 
+async function getPhotosByCpf(cpf) {
+  if (typeof window === "undefined") return [];
+
+  try {
+    const cleanCpf = String(cpf).replace(/\D/g, "");
+    const response = await authFetch(`${API_ENDPOINT}/get-fotos-paciente/?cpf=${cleanCpf}`);
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch patient photos");
+    }
+
+    return await response.json();
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
+}
+
 export default {
   getAll,
   getByCpf,
+  getPhotosByCpf,
 };

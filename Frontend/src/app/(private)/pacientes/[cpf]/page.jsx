@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 
 import Header from "@/components/Header";
 import RiskBadge from "@/components/RiskBadge";
+import PhotoModal from "@/components/PhotoModal";
 
 import PatientService from "@/services/PatientService";
 import AttendanceService from "@/services/AttendanceService";
@@ -18,6 +19,8 @@ export default function PatientDetails() {
   const [attendances, setAttendances] = useState([]);
   const [recentAttendance, setAttendance] = useState(null);
   const [responsavel, setResponsavel] = useState(null);
+  const [photos, setPhotos] = useState([]);
+  const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   
 
   useEffect(() => {
@@ -34,6 +37,10 @@ export default function PatientDetails() {
 
     setAttendances(sortedAttendances);
     setAttendance(sortedAttendances[0] || null);
+
+    // Fetch photos
+    const patientPhotos = await PatientService.getPhotosByCpf(params.cpf);
+    setPhotos(patientPhotos);
   }
 
   findPatient();
@@ -137,6 +144,33 @@ export default function PatientDetails() {
                 </p>
               </div>
             </div>
+
+            {photos.length > 0 && (
+              <div className="mt-8">
+                <p className="text-sm text-slate-500 mb-3">Foto do Paciente</p>
+                <button
+                  onClick={() => setIsPhotoModalOpen(true)}
+                  className="relative w-full md:w-64 h-80 bg-slate-100 rounded-2xl overflow-hidden hover:opacity-90 transition cursor-pointer border-2 border-slate-200 hover:border-blue-400"
+                >
+                  {photos.find((p) => p.tipo_foto === "frente")?.caminho_foto ? (
+                    <img
+                      src={photos.find((p) => p.tipo_foto === "frente").caminho_foto}
+                      alt="Foto frontal do paciente"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <p className="text-slate-400">Foto não disponível</p>
+                    </div>
+                  )}
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/0 bg-opacity-0 hover:bg-opacity-20 transition">
+                    <span className="text-white opacity-0 hover:opacity-100 text-sm font-semibold">
+                      Clique para ver todas
+                    </span>
+                  </div>
+                </button>
+              </div>
+            )}
           </div>
 
           {scoreHistory.length > 0 && (
@@ -290,6 +324,12 @@ export default function PatientDetails() {
           </div>
         </div>
       </section>
+
+      <PhotoModal
+        isOpen={isPhotoModalOpen}
+        onClose={() => setIsPhotoModalOpen(false)}
+        photos={photos}
+      />
     </main>
   );
 }

@@ -107,6 +107,20 @@ def get_responsaveis(request):
     items = Responsavel.objects.all()
     return Response(ResponsavelSerializer(items, many=True).data)
 
+@api_view(['GET'])
+@permission_classes([IsMedico])
+def get_fotos_paciente(request):
+    cpf = request.query_params.get('cpf')
+    
+    if not cpf:
+        return Response({'error': 'cpf is required'}, status=400)
+    
+    try:
+        photos = FotoPaciente.objects.filter(paciente__CPF_Paciente=cpf)
+        return Response(FotoPacienteSerializer(photos, many=True, context={'request': request}).data)
+    except Exception as e:
+        return Response({'error': str(e)}, status=400)
+
 @api_view(['POST'])
 @permission_classes([IsMedico])
 def post_historico_de_consulta(request):
