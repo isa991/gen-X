@@ -13,7 +13,7 @@ create table Paciente(
   nome varchar(50),
   data_de_nascimento date,
   sexo Varchar(15),
-  grau_de_parentesco Varchar(15),
+  
   status boolean
 );
 create table FotoPaciente(
@@ -29,7 +29,8 @@ create table Responsavel(
   nome varchar(50),
   data_de_nascimento date,
   sexo varchar(50),
-  telefone varchar(20)
+  telefone varchar(20),
+  grau_de_parentesco Varchar(20),
 );
 
 create table ListadeSintomas(
@@ -44,13 +45,13 @@ create table historico_de_consulta (
   data_de_consulta date,
   CPF_Paciente varchar(11),
   CPF_Responsavel varchar(11),
-  cmr int,
+  crm int,
   score_do_paciente int,
   sintomas varchar(250),
   score_risco int,
   FOREIGN KEY (CPF_Paciente) REFERENCES Paciente(CPF_Paciente),
   FOREIGN KEY (CPF_Responsavel) REFERENCES Responsavel(CPF_Responsavel),
-  FOREIGN KEY (id_medico) REFERENCES Medico(id_medico)
+  FOREIGN KEY (crm) REFERENCES Medico(crm)
 	
 );
 
