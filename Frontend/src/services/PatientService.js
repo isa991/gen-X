@@ -45,8 +45,88 @@ async function getPhotosByCpf(cpf) {
   }
 }
 
+async function updatePatient(cpf, patientData) {
+  const cleanCpf = String(cpf).replace(/\D/g, "");
+
+  try {
+    const response = await authFetch(`${API_ENDPOINT}/atualizar-paciente/${cleanCpf}/`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(patientData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update patient");
+    }
+
+    return await response.json();
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
+
+async function updatePhoto(photoId, photoData) {
+  try {
+    const formData = new FormData();
+    
+    Object.entries(photoData).forEach(([key, value]) => {
+      if (value !== null && value !== undefined) {
+        formData.append(key, value);
+      }
+    });
+
+    const response = await authFetch(`${API_ENDPOINT}/atualizar-foto-paciente/${photoId}/`, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update photo");
+    }
+
+    return await response.json();
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
+
+async function addPhoto(cpf, photoData) {
+  const cleanCpf = String(cpf).replace(/\D/g, "");
+
+  try {
+    const formData = new FormData();
+    
+    Object.entries(photoData).forEach(([key, value]) => {
+      if (value !== null && value !== undefined) {
+        formData.append(key, value);
+      }
+    });
+
+    const response = await authFetch(`${API_ENDPOINT}/adicionar-foto-paciente/${cleanCpf}/`, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to add photo");
+    }
+
+    return await response.json();
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
+
 export default {
   getAll,
   getByCpf,
   getPhotosByCpf,
+  updatePatient,
+  updatePhoto,
+  addPhoto,
 };

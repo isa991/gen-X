@@ -112,7 +112,7 @@ export default function PatientDetails() {
               <div className="flex gap-3">
                 <button
                   onClick={() =>
-                    router.push(`/pacientes/${patient.cpf}/editar`)
+                    router.push(`/pacientes/${params.cpf}/editar`)
                   }
                   className="px-5 py-2 bg-amber-500 text-white rounded-xl hover:bg-amber-600 transition"
                 >

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import PatientService from "@/services/PatientService";
@@ -36,6 +36,12 @@ export default function Atendimento() {
 
   const [selectedSymptoms, setSelectedSymptoms] = useState([]);
   const [score, setScore] = useState(0);
+
+  useEffect(() => {
+    if (step === 3 && existingPatient?.status === false) {
+      router.push("/pacientes/");
+    }
+  }, [step, existingPatient, router]);
 
   const formatCPF = (value) => {
     return value
@@ -160,7 +166,11 @@ export default function Atendimento() {
               Verificação do paciente
             </h1>
 
-            {existingPatient ? (
+            {existingPatient ? existingPatient.status === false ? (
+              <div className="p-4 bg-red-50 text-red-700 rounded-xl">
+                ❌ Paciente encontrado, mas está inativo. Por favor, reative o paciente na aba de edição para prosseguir.
+              </div>
+            ) : (
               <div className="p-4 bg-green-50 text-green-700 rounded-xl">
                 ✔ Paciente encontrado: <strong>{existingPatient.nome}</strong>
               </div>
@@ -278,12 +288,14 @@ export default function Atendimento() {
               </>
             )}
 
-            <SymptomChecklist
-              selectedSymptoms={selectedSymptoms}
-              setSelectedSymptoms={setSelectedSymptoms}
-              setScore={setScore}
-              gender={sex}
-            />
+            {existingPatient?.status === true && (
+              <SymptomChecklist
+                selectedSymptoms={selectedSymptoms}
+                setSelectedSymptoms={setSelectedSymptoms}
+                setScore={setScore}
+                gender={sex}
+              />
+            )}
 
             {guardianCpf && !existingGuardian && (
               <>

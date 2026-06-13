@@ -128,7 +128,7 @@ export default function Configuracoes() {
     try {
       setIsUpdating(true);
       clearMessages();
-      const result = await DoctorService.toggleStatus(selectedDoctor.id_medico);
+      const result = await DoctorService.toggleStatus(selectedDoctor.crm);
 
       setSelectedDoctor((prev) => ({
         ...prev,
@@ -175,7 +175,7 @@ export default function Configuracoes() {
       }
 
       const result = await DoctorService.updateCredentials(
-        selectedDoctor.id_medico,
+        selectedDoctor.crm,
         updates
       );
 
@@ -356,10 +356,10 @@ export default function Configuracoes() {
                     <div className="space-y-3 max-h-96 overflow-y-auto">
                       {filteredDoctors.map((doctor) => (
                         <div
-                          key={doctor.id_medico}
+                          key={doctor.crm}
                           onClick={() => handleSelectDoctorFromList(doctor)}
                           className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                            selectedDoctor?.id_medico === doctor.id_medico
+                            selectedDoctor?.crm === doctor.crm
                               ? "border-blue-600 bg-blue-50"
                               : "border-slate-200 bg-white hover:border-blue-400 hover:bg-slate-50"
                           }`}
@@ -372,12 +372,12 @@ export default function Configuracoes() {
                                 </span>
                                 <span
                                   className={`px-2 py-1 rounded text-xs font-semibold ${
-                                    doctor.is_active
+                                    selectedDoctor.is_active
                                       ? "bg-green-100 text-green-700"
                                       : "bg-red-100 text-red-700"
                                   }`}
                                 >
-                                  {doctor.is_active ? "Ativo" : "Inativo"}
+                                  {selectedDoctor.is_active ? "Ativo" : "Inativo"}
                                 </span>
                               </div>
                               <p className="text-sm text-slate-600">

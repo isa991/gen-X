@@ -5,7 +5,6 @@ urlpatterns = [
     path('sintomas/', views.get_sintomas, name='get_sintomas'),
     path('cadastro-paciente/', views.cadastrar_paciente, name='cadastrar_paciente'),
     path('cadastro-foto-paciente/', views.cadastrar_foto_paciente, name='cadastrar_foto_paciente'),
-    path('cadastro-medico/', views.cadastrar_medico, name='cadastrar_medico'),
     path('cadastro-responsavel/', views.cadastrar_Responsavel, name='cadastrar_responsavel'),
     path('adicionar-historico-de-consulta/', views.post_historico_de_consulta, name='post_historico_de_consulta'),
     path('get-historico-de-consulta/', views.get_historico_de_consulta, name='get_historico_de_consulta'),
@@ -14,6 +13,11 @@ urlpatterns = [
     path('get-fotos-paciente/', views.get_fotos_paciente, name='get_fotos_paciente'),
     path('medico/', views.get_medico, name='get_medico'),
     path('get-all-medicos/', views.get_medicos, name='get_medicos'),
+    
+    # Patient update endpoints
+    path('atualizar-paciente/<str:cpf>/', views.atualizar_paciente, name='atualizar_paciente'),
+    path('atualizar-foto-paciente/<int:id_foto>/', views.atualizar_foto_paciente, name='atualizar_foto_paciente'),
+    path('adicionar-foto-paciente/<str:cpf>/', views.adicionar_foto_paciente, name='adicionar_foto_paciente'),
     
     # Doctor management endpoints (admin only)
     path('medico-with-user/', views.get_medico_with_user, name='get_medico_with_user'),

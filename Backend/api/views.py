@@ -124,6 +124,16 @@ def get_fotos_paciente(request):
 @api_view(['POST'])
 @permission_classes([IsMedico])
 def post_historico_de_consulta(request):
+    # Check if patient exists and is active
+    paciente_cpf = request.data.get('paciente')
+    if paciente_cpf:
+        try:
+            paciente = Paciente.objects.get(CPF_Paciente=paciente_cpf)
+            if not paciente.status:
+                return Response({'error': 'Cannot create attendance for an inactive patient'}, status=status.HTTP_400_BAD_REQUEST)
+        except Paciente.DoesNotExist:
+            pass  # Allow creation if patient doesn't exist yet
+    
     serializer = historico_de_consulta_Serializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -321,4 +331,60 @@ def register_medico_admin(request):
             'message': 'Doctor registered successfully'
         }, status=status.HTTP_201_CREATED)
     
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PATCH'])
+@permission_classes([IsMedico])
+def atualizar_paciente(request, cpf):
+    """
+    Update patient information (name, sex, birth date, status)
+    """
+    try:
+        paciente = Paciente.objects.get(CPF_Paciente=cpf)
+    except Paciente.DoesNotExist:
+        return Response({'error': 'Patient not found'}, status=404)
+    
+    serializer = PacienteSerializer(paciente, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([IsMedico])
+@parser_classes([MultiPartParser, FormParser])
+def atualizar_foto_paciente(request, id_foto):
+    """
+    Update a patient's photo
+    """
+    try:
+        foto = FotoPaciente.objects.get(id_foto=id_foto)
+    except FotoPaciente.DoesNotExist:
+        return Response({'error': 'Photo not found'}, status=404)
+    
+    serializer = FotoPacienteSerializer(foto, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([IsMedico])
+@parser_classes([MultiPartParser, FormParser])
+def adicionar_foto_paciente(request, cpf):
+    """
+    Add a new photo for a patient
+    """
+    try:
+        paciente = Paciente.objects.get(CPF_Paciente=cpf)
+    except Paciente.DoesNotExist:
+        return Response({'error': 'Patient not found'}, status=404)
+    
+    request.data._mutable = True
+    request.data['paciente'] = paciente.CPF_Paciente
+    
+    serializer = FotoPacienteSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

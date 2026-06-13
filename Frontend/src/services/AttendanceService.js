@@ -92,9 +92,19 @@ async function registerAttendance(data) {
     throw new Error("CPF do paciente é obrigatório.");
   }
 
-  const patientExists = patients.some(
+  const existingPatient = patients.find(
     (p) => p.CPF_Paciente === cleanedPatientCpf
   );
+
+  console.log("Existing patient:", existingPatient);
+  console.log("Patient status:", existingPatient?.status);
+
+  // Check if patient is inactive
+  if (existingPatient && existingPatient.status === false) {
+    throw new Error("PATIENT_INACTIVE::Este paciente está inativo e não pode receber novos atendimentos. Por favor, reative o paciente na aba de edição.");
+  }
+
+  const patientExists = !!existingPatient;
 
   if (!patientExists) {
     const newPatient = {
