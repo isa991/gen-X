@@ -75,7 +75,7 @@ export default function RelatorioPaciente() {
                 </div>
 
                 <div>
-                  <p>Sexo</p>
+                  <p>Sexo biológico</p>
                   <p>{patient.sexo || "-"}</p>
                 </div>
 

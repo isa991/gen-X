@@ -215,7 +215,7 @@ export default function Atendimento() {
                   onChange={(e) => setSex(e.target.value)}
                   className="w-full p-3 border rounded-xl"
                 >
-                  <option value="">Selecione o sexo do paciente</option>
+                  <option value="">Selecione o sexo biológico do paciente</option>
                   <option value="Masculino">Masculino</option>
                   <option value="Feminino">Feminino</option>
                 </select>

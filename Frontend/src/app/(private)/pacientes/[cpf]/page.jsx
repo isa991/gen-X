@@ -126,7 +126,7 @@ export default function PatientDetails() {
               </div>
 
               <div className="bg-slate-50 rounded-2xl p-5">
-                <p className="text-sm text-slate-500">Sexo</p>
+                <p className="text-sm text-slate-500">Sexo biológico</p>
                 <p className="text-lg font-semibold">{patient.sexo || "-"}</p>
               </div>
 
