@@ -13,7 +13,7 @@ create table Paciente(
   nome varchar(50),
   data_de_nascimento date,
   sexo Varchar(15),
-  status boolean,
+  status boolean
 );
 create table FotoPaciente(
     id_foto int primary key auto_increment,
