@@ -44,7 +44,7 @@ create table historico_de_consulta (
   data_de_consulta date,
   CPF_Paciente varchar(11),
   CPF_Responsavel varchar(11),
-  cmr int,
+  crm int,
   score_do_paciente int,
   sintomas varchar(250),
   score_risco int,
