@@ -59,6 +59,14 @@ export default function RelatorioPaciente() {
         />
 
         <div className="p-8">
+          <div className="flex justify-end mb-4 print:hidden">
+            <button
+              onClick={() => window.print()}
+              className="flex items-center gap-2 px-4 py-2 bg-white rounded-xl shadow-sm text-slate-600 hover:bg-slate-50 transition-colors"
+            >
+              🖨️ Imprimir
+            </button>
+          </div>
           <div className="bg-white rounded-3xl shadow-sm p-10 space-y-10">
             <section>
               <h2 className="text-xl font-semibold mb-6">Identificação</h2>

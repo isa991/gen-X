@@ -10,7 +10,7 @@ export default function Sidebar() {
 
   return (
     <aside
-      className="w-64 min-h-screen bg-slate-900 text-white flex flex-col shrink-0">
+      className="w-64 min-h-screen bg-slate-900 text-white flex flex-col shrink-0 print:hidden">
       <div className="p-6 space-y-6">
         <h1 className="text-xl font-bold">GenX</h1>
 

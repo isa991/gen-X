@@ -5,6 +5,13 @@
   --foreground: #171717;
 }
 
+@media print {
+  @page {
+    size: A4 portait;
+    margin: 0;
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
