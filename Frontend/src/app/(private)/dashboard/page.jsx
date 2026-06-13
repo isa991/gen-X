@@ -40,15 +40,15 @@ export default function Dashboard() {
       setAttendances(allAttendances);
 
       const calculatedScores = allAttendances.filter(
-        (attendance) => attendance.score_risco !== undefined,
+        (attendance) => attendance.score_do_paciente !== undefined,
       ).length;
 
       const highRiskPatients = allAttendances.filter(
-        (attendance) => attendance.score_risco >= 77,
+        (attendance) => attendance.score_do_paciente >= 77,
       ).length;
 
       const totalScore = allAttendances.reduce(
-        (sum, attendance) => sum + (attendance.score_risco || 0),
+        (sum, attendance) => sum + (attendance.score_do_paciente || 0),
         0,
       );
 
@@ -68,15 +68,15 @@ export default function Dashboard() {
   const pieData = [
     {
       name: "Alto Risco",
-      value: attendances.filter((a) => a.score_risco >= 70).length,
+      value: attendances.filter((a) => a.score_do_paciente >= 70).length,
     },
     {
       name: "Risco Moderado",
-      value: attendances.filter((a) => a.score_risco >= 40 && a.score_risco <= 69).length,
+      value: attendances.filter((a) => a.score_do_paciente >= 40 && a.score_do_paciente <= 69).length,
     },
     {
       name: "Baixo Risco",
-      value: attendances.filter((a) => a.score_risco >= 0 && a.score_risco <= 39).length,
+      value: attendances.filter((a) => a.score_do_paciente >= 0 && a.score_do_paciente <= 39).length,
     },
   ];
 
@@ -104,7 +104,7 @@ export default function Dashboard() {
 
     console.log(JSON.stringify(latest));
 
-    const score = attendance?.score_risco ?? 0;
+    const score = attendance?.score_do_paciente ?? 0;
     const status =
       score <= 40 ? "Baixo Risco" : score <= 70 ? "Risco Moderado" : "Alto Risco";
 
