@@ -49,6 +49,11 @@ class PacienteSerializer(serializers.ModelSerializer):
         model = Paciente
         fields = '__all__'
 
+class FotoPacienteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FotoPaciente
+        fields = '__all__'
+
 class ResponsavelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Responsavel

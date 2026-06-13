@@ -118,9 +118,18 @@ def post_historico_de_consulta(request):
 
 @api_view(['POST'])
 @permission_classes([IsMedico])
-@parser_classes([MultiPartParser, FormParser]) 
 def cadastrar_paciente(request):
     serializer = PacienteSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([IsMedico])
+@parser_classes([MultiPartParser, FormParser]) 
+def cadastrar_foto_paciente(request):
+    serializer = FotoPacienteSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)

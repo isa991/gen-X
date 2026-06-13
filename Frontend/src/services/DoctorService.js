@@ -21,8 +21,10 @@ async function getAll() {
 
 async function getByCrm(crm) {
   const response = await authFetch(`${API_ENDPOINT}/medico/?crm=${crm}`);
-  const data = await response.json();
-  return data;
+   if (!response.ok) {
+    throw new Error(`Doctor not found for CRM: ${crm}`);
+  }
+  return await response.json();
 }
 
 async function searchByCrm(crm) {

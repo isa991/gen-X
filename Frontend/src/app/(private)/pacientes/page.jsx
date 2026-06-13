@@ -43,6 +43,14 @@ export default function Pacientes() {
     router.push(`/pacientes/${cpfSearch}`);
   };
 
+  const filteredPatients = cpfSearch.trim()
+    ? patients.filter((patient) => {
+        const patientCPF = patient.CPF_Paciente.replace(/\D/g, "");
+        const searchCPF = cpfSearch.replace(/\D/g, "");
+        return patientCPF.includes(searchCPF);
+      })
+    : patients;
+
   return (
     <main className="flex min-h-screen bg-slate-100">
       <section className="flex-1">
@@ -109,7 +117,7 @@ export default function Pacientes() {
                 </thead>
 
                 <tbody>
-                  {patients.map((patient) => {
+                  {filteredPatients.map((patient) => {
                     const patientAttendances = attendances.filter(
                     (attendance) => attendance.paciente === patient.CPF_Paciente
                   );

@@ -245,7 +245,7 @@ export default function Configuracoes() {
       });
 
       setSuccessMessage(
-        `Doctor "${result.user.username}" created successfully! CRM: ${result.medico.crm}`
+        `Médico "${result.user.username}" criado com sucesso! CRM: ${result.medico.crm}`
       );
 
       // Reset form
@@ -271,7 +271,7 @@ export default function Configuracoes() {
   };
 
   return (
-        <main className="flex min-h-screen bg-slate-100">
+    <main className="flex min-h-screen bg-slate-100">
       <section className="flex-1">
         <Header
           title="Configurações"

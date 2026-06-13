@@ -5,6 +5,7 @@ from .models import *
 admin.site.register(Usuario)
 admin.site.register(Medico)
 admin.site.register(Paciente)
+admin.site.register(FotoPaciente)
 admin.site.register(Responsavel)
 admin.site.register(ListadeSintomas)
 admin.site.register(historico_de_consulta)

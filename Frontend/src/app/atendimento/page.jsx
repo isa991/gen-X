@@ -25,11 +25,14 @@ export default function Atendimento() {
   const [birthDate, setBirthDate] = useState("");
   const [sex, setSex] = useState("");
   const [profilePic, setProfilePic] = useState("");
+  const [leftSidePic, setLeftSidePic] = useState("");
+  const [rightSidePic, setRightSidePic] = useState("");
 
   const [guardianFullName, setGuardianFullName] = useState("");
   const [guardianBirthDate, setGuardianBirthDate] = useState("");
   const [guardianSex, setGuardianSex] = useState("");
   const [guardianPhone, setGuardianPhone] = useState("");
+  const [relationship, setRelationship] = useState("");
 
   const [selectedSymptoms, setSelectedSymptoms] = useState([]);
   const [score, setScore] = useState(0);
@@ -76,6 +79,7 @@ export default function Atendimento() {
         setGuardianBirthDate(guardian.data_de_nascimento || "");
         setGuardianSex(guardian.sexo || "");
         setGuardianPhone(guardian.telefone || "");
+        setRelationship(guardian.grau_de_parentesco || "");
       }
 
       setStep(2);
@@ -93,12 +97,15 @@ export default function Atendimento() {
         nome_paciente: existingPatient?.nome || fullName,
         sexo_paciente: sex,
         data_de_nascimento_paciente: birthDate,
-        foto_do_paciente: profilePic,
+        foto_de_frente_do_paciente: profilePic,
+        foto_do_lado_esquerdo_do_paciente: leftSidePic,
+        foto_do_lado_direito_do_paciente: rightSidePic,
         CPF_Responsavel: guardianCpf,
         nome_responsavel: existingGuardian?.nome || guardianFullName,
         data_de_nascimento_responsavel: guardianBirthDate,
         sexo_responsavel: guardianSex,
         telefone: guardianPhone,
+        grau_de_parentesco: relationship,
         sintomas: selectedSymptoms,
         score_risco: score,
       });
@@ -220,20 +227,54 @@ export default function Atendimento() {
                   <option value="Feminino">Feminino</option>
                 </select>
 
-                <input
-                  type="file"
-                  onChange={(e) => setProfilePic(e.target.files[0] ?? null)}
-                  accept="image/*"
-                  className="
-                    relative w-full h-32
-                    bg-gray-100 border rounded-xl p-3
-                    cursor-pointer text-sm text-gray-500 text-center
-                    file:absolute file:top-2 file:right-2
-                    file:rounded-md file:border-0
-                    file:bg-gray-300 file:text-xs file:font-medium file:text-gray-700
-                    file:px-3 file:py-1 file:cursor-pointer
-                  "
-                />
+                <div className="grid md:grid-cols-3 gap-3 text-sm text-gray-500 text-center">
+                  <p className="text-center text-gray-700">Foto de frente</p>
+                  <p className="text-center text-gray-700">Foto do lado esquerdo</p>
+                  <p className="text-center text-gray-700">Foto do lado direito</p>
+
+                  <input
+                    type="file"
+                    onChange={(e) => setProfilePic(e.target.files[0] ?? null)}
+                    accept="image/*"
+                    className="
+                      relative w-full h-32
+                      bg-gray-100 border rounded-xl p-3
+                      cursor-pointer text-sm text-gray-500 text-center
+                      file:absolute file:top-2 file:right-2
+                      file:rounded-md file:border-0
+                      file:bg-gray-300 file:text-xs file:font-medium file:text-gray-700
+                      file:px-3 file:py-1 file:cursor-pointer
+                    "
+                  />
+                  <input
+                    type="file"
+                    onChange={(e) => setLeftSidePic(e.target.files[0] ?? null)}
+                    accept="image/*"
+                    className="
+                      relative w-full h-32
+                      bg-gray-100 border rounded-xl p-3
+                      cursor-pointer text-sm text-gray-500 text-center
+                      file:absolute file:top-2 file:right-2
+                      file:rounded-md file:border-0
+                      file:bg-gray-300 file:text-xs file:font-medium file:text-gray-700
+                      file:px-3 file:py-1 file:cursor-pointer
+                    "
+                  />
+                  <input
+                    type="file"
+                    onChange={(e) => setRightSidePic(e.target.files[0] ?? null)}
+                    accept="image/*"
+                    className="
+                      relative w-full h-32
+                      bg-gray-100 border rounded-xl p-3
+                      cursor-pointer text-sm text-gray-500 text-center
+                      file:absolute file:top-2 file:right-2
+                      file:rounded-md file:border-0
+                      file:bg-gray-300 file:text-xs file:font-medium file:text-gray-700
+                      file:px-3 file:py-1 file:cursor-pointer
+                    "
+                  />
+                </div>
               </>
             )}
 
@@ -275,6 +316,23 @@ export default function Atendimento() {
                   <option value="">Selecione o sexo do responsável</option>
                   <option value="Masculino">Masculino</option>
                   <option value="Feminino">Feminino</option>
+                </select>
+
+                <select
+                  value={relationship}
+                  onChange={(e) => setRelationship(e.target.value)}
+                  className="w-full p-3 border rounded-xl"
+                >
+                  <option value="">Grau de parentesco</option>
+                  <option value="Pai">Pai</option>
+                  <option value="Mãe">Mãe</option>
+                  <option value="Irmão">Irmão</option>
+                  <option value="Irmã">Irmã</option>
+                  <option value="Tia">Tia</option>
+                  <option value="Tio">Tio</option>
+                  <option value="Avô">Avô</option>
+                  <option value="Avó">Avó</option>
+                  <option value="Outro">Outro</option>
                 </select>
               </>
             )}

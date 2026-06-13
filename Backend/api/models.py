@@ -19,10 +19,10 @@ class Usuario(AbstractUser):
         db_table = 'Usuario'
 
 class Medico(models.Model):
-    id_medico = models.AutoField(primary_key=True)
-    email_medico = models.CharField(max_length=254)
+    crm = models.CharField(max_length=10, primary_key=True)
+    email_medico = models.CharField(max_length=30)
     senha = models.CharField(max_length=50)
-    crm = models.CharField(max_length=10)
+    status = models.BooleanField(default=True)
     
     class Meta:
         db_table = 'Medico'
@@ -32,10 +32,20 @@ class Paciente(models.Model):
     nome = models.CharField(max_length=50)
     data_de_nascimento = models.DateField()
     sexo = models.CharField(max_length=15)
-    foto_do_paciente = models.ImageField(upload_to='pacientes/fotos/', null=True, blank=True)
-    
+    status = models.BooleanField(default=True)
+
     class Meta:
         db_table = 'Paciente'
+
+class FotoPaciente(models.Model):
+    id_foto = models.AutoField(primary_key=True)
+    tipo_foto = models.CharField(max_length=20)
+    caminho_foto = models.ImageField(upload_to='pacientes/fotos/')
+
+    paciente = models.ForeignKey(Paciente,on_delete=models.CASCADE,related_name='fotos',db_column='CPF_Paciente',to_field='CPF_Paciente')
+    
+    class Meta:
+        db_table = 'FotoPaciente'
 
 class Responsavel(models.Model):
     CPF_Responsavel = models.CharField(max_length=11, primary_key=True)
@@ -43,7 +53,8 @@ class Responsavel(models.Model):
     data_de_nascimento = models.DateField()
     sexo = models.CharField(max_length=50)
     telefone = models.CharField(max_length=20)
-    
+    grau_de_parentesco = models.CharField(max_length=20, null=True, blank=True)
+
     class Meta:
         db_table = 'Responsavel'
 
@@ -65,7 +76,7 @@ class historico_de_consulta(models.Model):
     # Foreign Keys
     paciente = models.ForeignKey(Paciente,on_delete=models.CASCADE,related_name='consultas',db_column='CPF_Paciente',to_field='CPF_Paciente')
     responsavel = models.ForeignKey(Responsavel,on_delete=models.SET_NULL,null=True,related_name='consultas',db_column='CPF_Responsavel',to_field='CPF_Responsavel')
-    medico = models.ForeignKey(Medico,on_delete=models.SET_NULL,null=True,related_name='consultas',db_column='id_medico',to_field='id_medico')
+    medico = models.ForeignKey(Medico,on_delete=models.SET_NULL,null=True,related_name='consultas',db_column='crm',to_field='crm')
     
     class Meta:
         db_table = 'historico_de_consulta'

@@ -4,6 +4,8 @@ from . import views
 urlpatterns = [
     path('sintomas/', views.get_sintomas, name='get_sintomas'),
     path('cadastro-paciente/', views.cadastrar_paciente, name='cadastrar_paciente'),
+    path('cadastro-foto-paciente/', views.cadastrar_foto_paciente, name='cadastrar_foto_paciente'),
+    path('cadastro-medico/', views.cadastrar_medico, name='cadastrar_medico'),
     path('cadastro-responsavel/', views.cadastrar_Responsavel, name='cadastrar_responsavel'),
     path('adicionar-historico-de-consulta/', views.post_historico_de_consulta, name='post_historico_de_consulta'),
     path('get-historico-de-consulta/', views.get_historico_de_consulta, name='get_historico_de_consulta'),

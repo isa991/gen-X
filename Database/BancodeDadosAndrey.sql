@@ -13,15 +13,15 @@ create table Paciente(
   nome varchar(50),
   data_de_nascimento date,
   sexo Varchar(15),
-  grau_de_parentesco Varchar(15),
   status boolean
 );
+
 create table FotoPaciente(
-    id_foto int primary key auto_increment,
-    CPF_Paciente varchar(11),
-    tipo_foto varchar(20),
-    caminho_foto varchar(255),
-    foreign key (CPF_Paciente) references Paciente(CPF_Paciente)
+  id_foto int primary key auto_increment,
+  CPF_Paciente varchar(11),
+  tipo_foto varchar(20),
+  caminho_foto varchar(255),
+  foreign key (CPF_Paciente) references Paciente(CPF_Paciente)
 );
 
 create table Responsavel(
@@ -29,7 +29,8 @@ create table Responsavel(
   nome varchar(50),
   data_de_nascimento date,
   sexo varchar(50),
-  telefone varchar(20)
+  telefone varchar(20),
+  grau_de_parentesco Varchar(15)
 );
 
 create table ListadeSintomas(
@@ -44,14 +45,13 @@ create table historico_de_consulta (
   data_de_consulta date,
   CPF_Paciente varchar(11),
   CPF_Responsavel varchar(11),
-  cmr int,
+  crm varchar(10),
   score_do_paciente int,
   sintomas varchar(250),
   score_risco int,
   FOREIGN KEY (CPF_Paciente) REFERENCES Paciente(CPF_Paciente),
   FOREIGN KEY (CPF_Responsavel) REFERENCES Responsavel(CPF_Responsavel),
-  FOREIGN KEY (id_medico) REFERENCES Medico(id_medico)
-	
+  FOREIGN KEY (crm) REFERENCES Medico(crm)
 );
 
 INSERT INTO ListadeSintomas (sintoma, peso_masc, peso_fem) VALUES

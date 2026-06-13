@@ -2,7 +2,7 @@ const API_ENDPOINT = "http://127.0.0.1:8000/api";
 
 import { authFetch } from "./authFetch";
 import PatientService from "./PatientService";
-import GuardainService from "./GuardianService";
+import GuardianService from "./GuardianService";
 import DoctorService from "./DoctorService";
 
 async function postFormData(url, payload, errorLabel) {
@@ -28,8 +28,6 @@ async function postFormData(url, payload, errorLabel) {
 
   return body;
 }
-
-
 
 async function getAll() {
   if (typeof window === "undefined") return [];
@@ -85,7 +83,7 @@ async function postJson(url, payload, errorLabel) {
 
 async function registerAttendance(data) {
   const patients = await PatientService.getAll();
-  const guardians = await GuardainService.getAll();
+  const guardians = await GuardianService.getAll();
 
   const cleanedPatientCpf = String(data.CPF_Paciente || "").replace(/\D/g, "");
   const cleanedGuardianCpf = String(data.CPF_Responsavel || "").replace(/\D/g, "");
@@ -104,14 +102,42 @@ async function registerAttendance(data) {
       nome: data.nome_paciente || "",
       sexo: data.sexo_paciente || "",
       data_de_nascimento: data.data_de_nascimento_paciente || "",
-      foto_do_paciente: data.foto_do_paciente || null,
+      status: true,
     };
 
-    await postFormData(
+    await postJson(
       `${API_ENDPOINT}/cadastro-paciente/`,
       newPatient,
       "Cadastro paciente error"
     );
+
+    const photos = [
+      {
+        paciente: cleanedPatientCpf,
+        tipo_foto: "frente",
+        caminho_foto: data.foto_de_frente_do_paciente || null,
+      },
+      {
+        paciente: cleanedPatientCpf,
+        tipo_foto: "esquerdo",
+        caminho_foto: data.foto_do_lado_esquerdo_do_paciente || null,
+      },
+      {
+        paciente: cleanedPatientCpf,
+        tipo_foto: "direito",
+        caminho_foto: data.foto_do_lado_direito_do_paciente || null,
+      }
+    ];
+
+    for (const photo of photos) {
+      if (photo.caminho_foto) {
+        await postFormData(
+          `${API_ENDPOINT}/cadastro-foto-paciente/`,
+          photo,
+          "Cadastro foto paciente error"
+        );
+      }
+    }
   }
 
   const guardianExists =
@@ -125,6 +151,7 @@ async function registerAttendance(data) {
       sexo: data.sexo_responsavel || "",
       data_de_nascimento: data.data_de_nascimento_responsavel || "",
       telefone: data.telefone || "",
+      grau_de_parentesco: data.grau_de_parentesco || "",
     };
 
     await postJson(
@@ -159,5 +186,5 @@ export default {
   getAllByCpf,
   getByCpf,
   getById,
-  registerAttendance,
+  registerAttendance
 };
