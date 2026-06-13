@@ -30,7 +30,7 @@ create table Responsavel(
   data_de_nascimento date,
   sexo varchar(50),
   telefone varchar(20),
-  grau_de_parentesco Varchar(15)
+  grau_de_parentesco varchar(20)
 );
 
 create table ListadeSintomas(
@@ -45,13 +45,13 @@ create table historico_de_consulta (
   data_de_consulta date,
   CPF_Paciente varchar(11),
   CPF_Responsavel varchar(11),
-  crm varchar(10),
+  crm int,
   score_do_paciente int,
   sintomas varchar(250),
-  score_risco int,
   FOREIGN KEY (CPF_Paciente) REFERENCES Paciente(CPF_Paciente),
   FOREIGN KEY (CPF_Responsavel) REFERENCES Responsavel(CPF_Responsavel),
-  FOREIGN KEY (crm) REFERENCES Medico(crm)
+  FOREIGN KEY (cmr) REFERENCES Medico(crm)
+	
 );
 
 INSERT INTO ListadeSintomas (sintoma, peso_masc, peso_fem) VALUES

@@ -31,11 +31,11 @@ export default function Relatorios() {
       const allAttendances = await AttendanceService.getAll();
       setAttendances(allAttendances);
 
-      const highRisk = allAttendances.filter((a) => a.score_risco >= 70 ? "Alto Risco" : "").length;
-      const moderateRisk = allAttendances.filter((a) => a.score_risco >= 40 && a.score_risco <= 69 ? "Risco Moderado" : "").length;
-      const lowRisk = allAttendances.filter((a) => a.score_risco >= 0 && a.score_risco <= 39 ? "Baixo Risco" : "").length;
+      const highRisk = allAttendances.filter((a) => a.score_do_paciente >= 70 ? "Alto Risco" : "").length;
+      const moderateRisk = allAttendances.filter((a) => a.score_do_paciente >= 40 && a.score_do_paciente <= 69 ? "Risco Moderado" : "").length;
+      const lowRisk = allAttendances.filter((a) => a.score_do_paciente >= 0 && a.score_do_paciente <= 39 ? "Baixo Risco" : "").length;
 
-      const totalScore = allAttendances.reduce((sum, a) => sum + (a.score_risco || 0), 0);
+      const totalScore = allAttendances.reduce((sum, a) => sum + (a.score_do_paciente || 0), 0);
 
       const averageScore = allAttendances.length > 0 ? Math.round(totalScore / allAttendances.length) : 0;
 
@@ -113,7 +113,7 @@ export default function Relatorios() {
                 {attendances.map((attendance) => {
                   const patient = patientMap[attendance.paciente];
 
-                  const score = attendance.score_risco || 0;
+                  const score = attendance.score_do_paciente || 0;
 
                   return (
                     <tr

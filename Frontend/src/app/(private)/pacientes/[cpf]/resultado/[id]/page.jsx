@@ -48,7 +48,7 @@ export default function Resultado() {
     return "Baixo Risco";
   };
 
-  const status = getRiskStatus(attendance.score_risco || 0);
+  const status = getRiskStatus(attendance.score_do_paciente || 0);
 
   return (
     <main className="flex min-h-screen bg-slate-100">
@@ -68,7 +68,7 @@ export default function Resultado() {
                     : "text-green-600"
               }`}
             >
-              {attendance.score_risco}%
+              {attendance.score_do_paciente}%
             </div>
 
             <span
@@ -83,8 +83,8 @@ export default function Resultado() {
               {status}
             </span>
             {
-              (attendance?.score_risco >= 56 && patient.sexo == "Masculino") ||
-              (attendance?.score_risco >= 55 && patient.sexo == "Feminino") ?
+              (attendance?.score_do_paciente >= 56 && patient.sexo == "Masculino") ||
+              (attendance?.score_do_paciente >= 55 && patient.sexo == "Feminino") ?
               (
                 <div className="text-2xl text-slate-500 mt-2 font-bold">
                   Recomenda-se encaminhar para exame

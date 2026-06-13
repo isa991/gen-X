@@ -85,11 +85,11 @@ export default function PatientDetails() {
   };
 
   const scoreHistory = attendances
-    .filter((item) => item.score_risco !== undefined && item.data_de_consulta)
+    .filter((item) => item.score_do_paciente !== undefined && item.data_de_consulta)
     .map((item, index) => ({
       index,
       date: new Date(item.data_de_consulta).toLocaleDateString("pt-BR"),
-      score: Number(item.score_risco),
+      score: Number(item.score_do_paciente),
     }));
 
   return (
@@ -224,21 +224,21 @@ export default function PatientDetails() {
                 <p className="text-sm text-slate-500">Score de risco</p>
                 <p
                   className={`text-5xl font-bold ${getRiskColor(
-                    recentAttendance?.score_risco,
+                    recentAttendance?.score_do_paciente,
                   )}`}
                 >
-                  {recentAttendance?.score_risco || 0}%
+                  {recentAttendance?.score_do_paciente || 0}%
                 </p>
               </div>
 
               <div>
                 <p className="text-sm text-slate-500 mb-2">Classificação</p>
-                <RiskBadge status={recentAttendance?.score_risco <= 40 ? "Baixo Risco" : recentAttendance?.score_risco <= 70 ? "Risco Moderado" : "Alto Risco"} />
+                <RiskBadge status={recentAttendance?.score_do_paciente <= 40 ? "Baixo Risco" : recentAttendance?.score_do_paciente <= 70 ? "Risco Moderado" : "Alto Risco"} />
                 <p className="text-sm text-slate-500 mt-2">
                   <strong>
                     {
-                      (recentAttendance?.score_risco >= 56 && patient.sexo == "Masculino") ||
-                      (recentAttendance?.score_risco >= 55 && patient.sexo == "Feminino") ?
+                      (recentAttendance?.score_do_paciente >= 56 && patient.sexo == "Masculino") ||
+                      (recentAttendance?.score_do_paciente >= 55 && patient.sexo == "Feminino") ?
                       "Recomenda-se encaminhar para exame" : ""
                     }
                   </strong>
@@ -310,9 +310,9 @@ export default function PatientDetails() {
                       </div>
                     )}
 
-                    {item.score_risco !== undefined && (
+                    {item.score_do_paciente !== undefined && (
                       <p className="mt-4 font-bold text-slate-800">
-                        Score: {item.score_risco}%
+                        Score: {item.score_do_paciente}%
                       </p>
                     )}
                   </div>

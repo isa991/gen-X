@@ -127,7 +127,7 @@ export default function Pacientes() {
                       new Date(b.data_de_consulta) - new Date(a.data_de_consulta)
                   )[0];
 
-                  const score = latestAttendance?.score_risco || 0;
+                  const score = latestAttendance?.score_do_paciente || 0;
 
                   return (
                     <tr

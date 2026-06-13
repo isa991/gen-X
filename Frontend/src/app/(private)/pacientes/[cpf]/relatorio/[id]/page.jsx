@@ -109,12 +109,12 @@ export default function RelatorioPaciente() {
                 <div className="bg-blue-50 p-6 rounded-2xl">
                   <p>Score</p>
                   <h3 className="text-5xl text-blue-600 font-bold">
-                    {attendance?.score_risco || 0}%
+                    {attendance?.score_do_paciente || 0}%
                   </h3>
                 </div>
 
                 <div className="bg-slate-50 p-6 rounded-2xl">
-                  <RiskBadge status={attendance?.score_risco <= 40 ? "Baixo Risco" : attendance?.score_risco <= 70 ? "Risco Moderado" : "Alto Risco"} />
+                  <RiskBadge status={attendance?.score_do_paciente <= 40 ? "Baixo Risco" : attendance?.score_do_paciente <= 70 ? "Risco Moderado" : "Alto Risco"} />
                 </div>
               </div>
             </section>

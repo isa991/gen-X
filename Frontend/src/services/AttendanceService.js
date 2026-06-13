@@ -169,7 +169,7 @@ async function registerAttendance(data) {
     paciente: cleanedPatientCpf,
     responsavel: cleanedGuardianCpf || null,
     sintomas: Array.isArray(data.sintomas) ? data.sintomas.join(", ") : "",
-    score_risco: data.score_risco || 0,
+    score_do_paciente: data.score_risco || 0,
   };
 
   await postJson(
