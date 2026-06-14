@@ -14,5 +14,6 @@ migrations/
 Frontend/.next
 Frontend/node_modules
 Frontend/dist
+bun.lock
 
 Backend/media/

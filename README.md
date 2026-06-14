@@ -4,6 +4,10 @@ Aplicação web médica para avaliação da **Síndrome do X Frágil**. A partir
 
 > Trabalho desenvolvido para a disciplina de **Experiência Criativa: Criando Soluções Computacionais** — Bacharelado em Ciência da Computação, Pontifícia Universidade Católica do Paraná (PUCPR), campus Curitiba.
 
+**Video explicativo do sistema:**
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/iKnNC4WrbwU?si=H84k-gl_6_ADNiRQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 ---
 
 ## Sobre o projeto
