@@ -288,14 +288,12 @@ export default function Atendimento() {
               </>
             )}
 
-            {existingPatient?.status === true && (
-              <SymptomChecklist
-                selectedSymptoms={selectedSymptoms}
-                setSelectedSymptoms={setSelectedSymptoms}
-                setScore={setScore}
-                gender={sex}
-              />
-            )}
+            <SymptomChecklist
+              selectedSymptoms={selectedSymptoms}
+              setSelectedSymptoms={setSelectedSymptoms}
+              setScore={setScore}
+              gender={sex}
+            />
 
             {guardianCpf && !existingGuardian && (
               <>
