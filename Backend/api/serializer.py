@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import *
 from django.contrib.auth import authenticate
 
+from django.db import transaction
+
 class UsuarioSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True)
     password2 = serializers.CharField(write_only=True, required=True)
@@ -10,19 +12,29 @@ class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
         fields = ['id', 'username', 'email', 'password', 'password2', 'role', 'crm']
-        
+
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Passwords must match."})
+        
+        # Validate CRM uniqueness here, before any DB writes
+        crm = attrs.get('crm')
+        role = attrs.get('role')
+        if role == 'medico' and crm:
+            if Medico.objects.filter(crm=crm).exists():
+                raise serializers.ValidationError({"crm": "A doctor with this CRM already exists."})
+        
         return attrs
-    
+
+    @transaction.atomic  # rolls back Usuario if Medico creation fails
     def create(self, validated_data):
         validated_data.pop('password2')
         crm = validated_data.pop('crm', None)
+        
         user = Usuario.objects.create_user(**validated_data)
 
         if user.role == 'medico' and crm:
-            Medico.objects.create(email_medico=user.email, senha=validated_data.get('password', ''), crm=crm)
+            Medico.objects.create(email_medico=user.email, crm=crm)
 
         return user
 

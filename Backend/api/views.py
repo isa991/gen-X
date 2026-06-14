@@ -239,7 +239,6 @@ def toggle_medico_status(request, pk):
     usuario.save()
     
     return Response({
-        'id_medico': medico.id_medico,
         'crm': medico.crm,
         'is_active': usuario.is_active,
         'message': f'Doctor {"activated" if usuario.is_active else "deactivated"} successfully'
@@ -288,7 +287,6 @@ def update_medico_credentials(request, pk):
     medico.save()
     
     return Response({
-        'id_medico': medico.id_medico,
         'crm': medico.crm,
         'username': usuario.username,
         'email': usuario.email,
@@ -324,7 +322,6 @@ def register_medico_admin(request):
                 'role': user.role,
             },
             'medico': {
-                'id_medico': medico.id_medico,
                 'crm': medico.crm,
             } if medico else None,
             'token': token.key,

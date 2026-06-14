@@ -21,8 +21,8 @@ urlpatterns = [
     
     # Doctor management endpoints (admin only)
     path('medico-with-user/', views.get_medico_with_user, name='get_medico_with_user'),
-    path('medico/<int:pk>/toggle-status/', views.toggle_medico_status, name='toggle_medico_status'),
-    path('medico/<int:pk>/update-credentials/', views.update_medico_credentials, name='update_medico_credentials'),
+    path('medico/<str:pk>/toggle-status/', views.toggle_medico_status, name='toggle_medico_status'),
+    path('medico/<str:pk>/update-credentials/', views.update_medico_credentials, name='update_medico_credentials'),
     path('admin/register-medico/', views.register_medico_admin, name='register_medico_admin'),
 
     # Authentication Paths

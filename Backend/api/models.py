@@ -21,7 +21,6 @@ class Usuario(AbstractUser):
 class Medico(models.Model):
     crm = models.CharField(max_length=10, primary_key=True)
     email_medico = models.CharField(max_length=30)
-    senha = models.CharField(max_length=50)
     status = models.BooleanField(default=True)
     
     class Meta:
