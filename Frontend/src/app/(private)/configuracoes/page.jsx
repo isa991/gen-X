@@ -372,12 +372,12 @@ export default function Configuracoes() {
                                 </span>
                                 <span
                                   className={`px-2 py-1 rounded text-xs font-semibold ${
-                                    selectedDoctor.is_active
+                                    doctor.status
                                       ? "bg-green-100 text-green-700"
                                       : "bg-red-100 text-red-700"
                                   }`}
                                 >
-                                  {selectedDoctor.is_active ? "Ativo" : "Inativo"}
+                                  {doctor.status ? "Ativo" : "Inativo"}
                                 </span>
                               </div>
                               <p className="text-sm text-slate-600">

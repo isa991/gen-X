@@ -4,7 +4,6 @@ use Hospital;
 create table Medico(
   crm varchar(10) primary key,
   email_medico varchar(30),
-  senha varchar(50),
   status boolean
 );
 
